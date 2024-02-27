@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -30,4 +30,133 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /*   --container-width: calc(100vw - 8rem);
+      --container-height: calc(100vh - 4rem); */
+  --light-background: #F4F5FA;
+  --dark-background: '#121212';
+  --light-primary: #99d;
+  --dark-primary: #BB86FC;
+  --light-surface: white;
+  --dark-surface: #1E1E1E;
+  --secondary: #03DAC6;
+  --on-background: black;
+  --light-on-surface: black;
+  --dark-on-surface: white;
+  --on-primary: black;
+  --on-secondary: black;
+  --light-line: #DDD;
+  --dark-line: #333;
+  --dark-input-background: #121212;
+  --light-input-background: #f4f5fa
+}
+
+html {
+  height: 100%;
+}
+
+/* Default/Light theme */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  background-color: var(--light-background);
+  --background: var(--light-background);
+  --primary: var(--light-primary);
+  --surface: var(--light-surface);
+  --on-surface: var(--light-on-surface);
+  --line: var(--light-line);
+  --input-background: var(--light-input-background)
+}
+
+/* Dark Theme */
+[data-theme='dark'] body {
+  background-color: var(--dark-background);
+  --background: var(--dark-background);
+  --primary: var(--dark-primary);
+  --surface: var(--dark-surface);
+  --on-surface: var(--dark-on-surface);
+  --line: var(--dark-line);
+  --input-background: var(--input-background);
+}
+
+.appContainer {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  /* Takes up remaining space */
+  height: 100%;
+  background-color: #f0f0f0;
+  /* Set your desired background color */
+  max-width: calc(100% - var(--sidebar-width));
+}
+
+/* For Webkit/Blink browsers (Chrome, Safari, Opera) */
+/* width and height are for the "track" */
+/* Scrollbar width and height (for the "thumb") are set in ::-webkit-scrollbar-thumb */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+  /* Color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  /* Color of the thumb */
+  border-radius: 6px;
+  /* Roundness of the thumb */
+}
+
+/* Horizontal Scrollbar */
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+/* Corner square */
+::-webkit-scrollbar-corner {
+  background: #121212;
+}
+
+/* For Firefox */
+/* width and height are for the "thumb" */
+/* Scrollbar width and height (for the "track") are set in scrollbar-color */
+/* scrollbar-color requires Firefox 64 or later */
+/* scrollbar-width requires Firefox 68 or later */
+/* Uncomment these styles if you want to support Firefox */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* For Internet Explorer and Edge */
+/* width is for the "track" */
+/* Scrollbar width and height (for the "thumb") are set in -ms-overflow-style */
+* {
+  -ms-overflow-style: none;
+  /* Hide scrollbar in IE and Edge */
+}
+
+*::-ms-scrollbar {
+  width: 12px;
+}
+
+*::-ms-thumb {
+  background: #888;
+  /* Color of the thumb */
+  border-radius: 6px;
+  /* Roundness of the thumb */
 }

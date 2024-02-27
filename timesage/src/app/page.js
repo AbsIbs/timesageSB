@@ -1,113 +1,136 @@
+// NextJS
 import Image from "next/image";
+// Components
+/* import SignIn from "@/components/signIn";
+import ContactUs from "@/components/contactUs"; */
+// Logos
+import awsLogo from "/public/logos/awsLogo@2x.svg";
+import nextJS from "/public/logos/nextJsLogo@2x.svg";
+import reactLogo from "/public/logos/reactLogo@2x.svg";
+import tailwindcssLogo from "/public/logos/tailwindcssLogo@2x.svg";
+// Icons
+import {
+  WatchLater as WatchLaterIcon,
+  ListAlt as ListAltIcon,
+  Equalizer as EqualizerIcon,
+  GitHub as GitHubIcon,
+  LinkedIn as LinkedInIcon,
+} from "@mui/icons-material";
 
-export default function Home() {
+export default async function Home({ params }) {
+  const icons = {
+    WatchLaterIcon: (
+      <WatchLaterIcon sx={{ color: "#7C58FF", fontSize: "50px" }} />
+    ),
+    ListAltIcon: <ListAltIcon sx={{ color: "#7C58FF", fontSize: "50px" }} />,
+    EquilizerIcon: (
+      <EqualizerIcon sx={{ color: "#7C58FF", fontSize: "50px" }} />
+    ),
+  };
+
+  const Card = (props) => {
+    const Icon = icons[props.icon];
+    return (
+      <div className="flex flex-col flex-1 gap-4">
+        {Icon}
+        <h4 className="text-white text-lg font-medium">{props.title}</h4>
+        <h5 className="text-[#ffffff90]">{props.desc}</h5>
+      </div>
+    );
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      {/* Header Section */}
+      {/* Hero section */}
+      <section
+        id="hero"
+        className="flex justify-center h-screen items-center p-4"
+        style={{ background: "linear-Gradient(#111113, #26223B)" }}
+      >
+        {/* Hero container */}
+        <div className="flex flex-col h-full items-center justify-center">
+          <div className="flex flex-col gap-8">
+            <h1 className="text-center text-white text-6xl">
+              Where <span className="text-[#7C58FF]">precision</span> meets{" "}
+              <span className="text-[#7C58FF]">productivity.</span>
+            </h1>
+            <h2 className="text-center text-lg text-[#ffffff90]">
+              Seamless time tracking. Powerful insights.
+            </h2>
+            <div className="flex flex-row gap-4 items-center justify-center">
+              {/* <SignIn />
+              <ContactUs /> */}
+            </div>
+            <div className="mt-16">
+              <p className="text-center text-sm text-[#ffffff90]">MADE WITH</p>
+              <div className="flex justify-evenly mt-6 ">
+                <Image alt="Made with React" height={35} src={reactLogo} />
+                <Image alt="Made with NextJS" height={35} src={nextJS} />
+                <Image
+                  alt="Made with TailwindCSS"
+                  height={35}
+                  src={tailwindcssLogo}
+                />
+                <Image alt="Made with AWS Amplify" height={35} src={awsLogo} />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
+      </section>
+      {/* Overview section */}
+      <section id="overview" className="flex justify-center bg-[#1A1727]">
+        {/* Overview container */}
+        <div className="flex flex-col gap-24 w-[1280px] h-full justify-center py-32 px-4">
+          <div>
+            <h2 className=" text-white text-3xl">
+              Seamlessly Create, Organize, and Boost Productivity
+            </h2>
+            <h3 className="py-2 text-lg text-[#ffffff90]">
+              Create, organize, and boost productivity with a built-in stopwatch
+              for accurate time tracking and insightful graphs.
+            </h3>
+          </div>
+          <div className="flex gap-8 bg-[#121212] rounded-lg p-12 border-line border-2 ">
+            <Card
+              title="Effortless Time Logging"
+              desc="Create detailed entries and utilize our interactive stopwatch to effortlessly track and log your tasks with precision."
+              icon="WatchLaterIcon"
+            />
+            <Card
+              title="Organize Your Work"
+              desc="Stay on top of your projects by creating separate jobs. Each job serves as a dedicated space to store and manage related entries seamlessly."
+              icon="ListAltIcon"
+            />
+            <Card
+              title="Visualize Your Progress"
+              desc="Gain valuable insights into your productivity journey with our analytics section. Graphically visualize your progress to make informed decisions and optimize your workflow."
+              icon="EquilizerIcon"
+            />
+          </div>
+        </div>
+      </section>
+      {/* Footer section */}
+      <section className="flex justify-center bg-[#121212]">
+        {/* Footer container */}
+        <div className="flex p-4 w-[1280px] h-full justify-between items-center">
+          <p className="text-white">
+            ©2023 | Made by{" "}
+            <span className="text-[#7C58FF] font-medium">Abass Ibrahim</span>
           </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <div className="flex gap-4">
+            <a target="_blank" href="https://github.com/absibs">
+              <GitHubIcon sx={{ color: "white", fontSize: "2.5rem" }} />
+            </a>
+            <a
+              target="_blank"
+              href="https://www.linkedin.com/in/abass-ibrahim/"
+            >
+              <LinkedInIcon sx={{ color: "white", fontSize: "2.5rem" }} />
+            </a>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
