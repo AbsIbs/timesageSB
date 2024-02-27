@@ -72,7 +72,6 @@ export default async function Home({ params }) {
                   height={35}
                   src={tailwindcssLogo}
                 />
-                <Image alt="Made with AWS Amplify" height={35} src={awsLogo} />
               </div>
             </div>
           </div>
