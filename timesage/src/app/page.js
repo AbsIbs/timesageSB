@@ -1,6 +1,11 @@
+// Supabase
+import { createClient } from "../../utils/supabase/server";
 // NextJS
 import Image from "next/image";
+import { redirect } from "next/navigation";
+
 // Components
+import SignIn from "@/components/signIn";
 /* import SignIn from "@/components/signIn";
 import ContactUs from "@/components/contactUs"; */
 // Logos
@@ -18,6 +23,16 @@ import {
 } from "@mui/icons-material";
 
 export default async function Home({ params }) {
+
+  // Auth check
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  console.log(data)
+  if (data.user) {
+    // Redirect user to the dashboard if they are signed in
+    redirect("/dashboard");
+  }
+
   const icons = {
     WatchLaterIcon: (
       <WatchLaterIcon sx={{ color: "#7C58FF", fontSize: "50px" }} />
@@ -59,8 +74,8 @@ export default async function Home({ params }) {
               Seamless time tracking. Powerful insights.
             </h2>
             <div className="flex flex-row gap-4 items-center justify-center">
-              {/* <SignIn />
-              <ContactUs /> */}
+              <SignIn />
+              {/* <ContactUs /> */}
             </div>
             <div className="mt-16">
               <p className="text-center text-sm text-[#ffffff90]">MADE WITH</p>
