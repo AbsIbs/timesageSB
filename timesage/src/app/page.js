@@ -1,15 +1,7 @@
-// Supabase
-import { createClient } from "../../utils/supabase/server";
 // NextJS
 import Image from "next/image";
-import { redirect } from "next/navigation";
-
-// Components
-import SignIn from "@/components/signIn";
-/* import SignIn from "@/components/signIn";
-import ContactUs from "@/components/contactUs"; */
+import Link from "next/link";
 // Logos
-import awsLogo from "/public/logos/awsLogo@2x.svg";
 import nextJS from "/public/logos/nextJsLogo@2x.svg";
 import reactLogo from "/public/logos/reactLogo@2x.svg";
 import tailwindcssLogo from "/public/logos/tailwindcssLogo@2x.svg";
@@ -23,15 +15,6 @@ import {
 } from "@mui/icons-material";
 
 export default async function Home({ params }) {
-
-  // Auth check
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
-  console.log(data)
-  if (data.user) {
-    // Redirect user to the dashboard if they are signed in
-    redirect("/dashboard");
-  }
 
   const icons = {
     WatchLaterIcon: (
@@ -74,8 +57,12 @@ export default async function Home({ params }) {
               Seamless time tracking. Powerful insights.
             </h2>
             <div className="flex flex-row gap-4 items-center justify-center">
-              <SignIn />
-              {/* <ContactUs /> */}
+              <Link href={'/signIn'} className="bg-primary px-6 py-3 text-white rounded">
+                Get started
+              </Link>
+              <Link href={'/'} className="bg-[#42404C] px-6 py-3 text-white rounded">
+                Contact us
+              </Link>
             </div>
             <div className="mt-16">
               <p className="text-center text-sm text-[#ffffff90]">MADE WITH</p>

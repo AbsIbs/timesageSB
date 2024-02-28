@@ -1,6 +1,8 @@
 // NextJS
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+// Supabase
+import { createClient } from "../../../utils/supabase/server";
 // Components
 /* import Topbar from "@/components/topbar";
 import Sidebar from "@/components/sidebar";
@@ -13,14 +15,12 @@ export const metadata = {
 };
 
 export default async function DashboardLayout({ children }) {
-
-/*   try {
-    const user = await Auth.currentAuthenticatedUser();
-  } catch (error) {
-    console.log(error);
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
     redirect("/");
   }
- */
+
   return (
     <div className=" m-0 p-0 flex items-start">
       <main className="flex-1">{children}</main>
