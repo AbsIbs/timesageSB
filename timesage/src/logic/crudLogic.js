@@ -78,6 +78,12 @@ export const getProjects = async () => {
   return data;
 };
 
+export const getProject = async (id) => {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("project").select().eq("id", id);
+  return data[0];
+};
+
 export const deleteProject = async (id) => {
   const supabase = createClient();
   const { error } = await supabase.from("project").delete().eq("id", id);
