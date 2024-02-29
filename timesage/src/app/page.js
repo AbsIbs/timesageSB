@@ -1,10 +1,13 @@
 // NextJS
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 // Logos
 import nextJS from "/public/logos/nextJsLogo@2x.svg";
 import reactLogo from "/public/logos/reactLogo@2x.svg";
 import tailwindcssLogo from "/public/logos/tailwindcssLogo@2x.svg";
+// Supabase
+import { createClient } from "../../utils/supabase/server";
 // Icons
 import {
   WatchLater as WatchLaterIcon,
@@ -13,6 +16,8 @@ import {
   GitHub as GitHubIcon,
   LinkedIn as LinkedInIcon,
 } from "@mui/icons-material";
+// Components
+import SignInWithGoogle from "@/components/signInWithGoogle";
 
 export default async function Home({ params }) {
 
@@ -57,12 +62,19 @@ export default async function Home({ params }) {
               Seamless time tracking. Powerful insights.
             </h2>
             <div className="flex flex-row gap-4 items-center justify-center">
-              <Link href={'/signIn'} className="bg-primary px-6 py-3 text-white rounded">
+              <Link
+                href={"/signIn"}
+                className="bg-primary px-6 py-3 text-white rounded"
+              >
                 Get started
               </Link>
-              <Link href={'/'} className="bg-[#42404C] px-6 py-3 text-white rounded">
+              <Link
+                href={"/"}
+                className="bg-[#42404C] px-6 py-3 text-white rounded"
+              >
                 Contact us
               </Link>
+              {/* <SignInWithGoogle /> */}
             </div>
             <div className="mt-16">
               <p className="text-center text-sm text-[#ffffff90]">MADE WITH</p>

@@ -1,11 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // Material UI
 import { Box } from "@mui/material";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
 // NextJS
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -51,11 +49,7 @@ const AuthForm = () => {
       <label htmlFor="projectIcon" className="flex flex-col gap-2">
         <div className="flex gap-2">
           {/* Sign in with google button */}
-          <form action={SignInWithGoogle} className="w-full">
-            <button className="flex gap-4 w-full rounded-md border border-line p-4 items-center justify-center">
-              <GoogleIcon /> <p>Continue with google</p>
-            </button>
-          </form>
+          <SignInWithGoogle />
         </div>
       </label>
       <form
@@ -103,13 +97,6 @@ const AuthForm = () => {
           >
             Sign in
           </button>
-          <Link
-            href={"/"}
-            variant="outlined"
-            className="border-2 flex items-center justify-center border-line rounded-md py-4 w-full"
-          >
-            Cancel
-          </Link>
         </div>
       </form>
     </Box>
