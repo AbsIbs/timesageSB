@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 // Providers
 import Provider from "./theme-provider";
+import { StopwatchProvider } from "@/components/stopwatchContext";
+import { StopwatchModalProvider } from "@/components/stopwatchModalContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,11 +32,11 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         <Provider>
-{/*           <StopwatchModalProvider>
-            <StopwatchProvider> */}
+          <StopwatchModalProvider>
+            <StopwatchProvider>
               <main className="flex-1">{children}</main>
-{/*             </StopwatchProvider>
-          </StopwatchModalProvider> */}
+            </StopwatchProvider>
+          </StopwatchModalProvider>
         </Provider>
       </body>
     </html>

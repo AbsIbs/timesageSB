@@ -1,6 +1,5 @@
 "use server";
 // NextJS
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 // Supabase
 import { createClient } from "../../utils/supabase/server";
@@ -15,8 +14,6 @@ export const checkUser = async () => {
     redirect("/dashboard");
   }
 };
-
-
 
 export const logout = async () => {
   // Initialise supabase client

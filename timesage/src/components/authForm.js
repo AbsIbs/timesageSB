@@ -46,12 +46,10 @@ const AuthForm = () => {
           <CircularProgress />
         </Modal>
       </div>
-      <label htmlFor="projectIcon" className="flex flex-col gap-2">
-        <div className="flex gap-2">
-          {/* Sign in with google button */}
-          <SignInWithGoogle />
-        </div>
-      </label>
+      {/* Sign in with google */}
+      <SignInWithGoogle />
+      <hr className="border-line" />
+      {/* Email and password form */}
       <form
         action={() => {
           setLoading(true);

@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "../../../utils/supabase/server";
 // Components
 import AuthForm from "@/components/authForm";
-import SignInServerUI from "@/components/signInServerUI";
 
 export const SignIn = async () => {
   // Auth check
@@ -18,7 +17,6 @@ export const SignIn = async () => {
 
   return (
     <div className="flex flex-1 h-screen items-center justify-center">
-      {/* <SignInServerUI /> */}
       <AuthForm />
     </div>
   );
