@@ -8,6 +8,9 @@ export const signInClean = async () => {
   const supabase = createClient();
   const res = await supabase.auth.signInWithOAuth({
     provider: "google",
+    options: {
+      redirectTo: "http://localhost:3000/signIn/",
+    },
   });
   console.log(res);
   revalidatePath("/", "layout");
