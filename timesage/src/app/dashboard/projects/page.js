@@ -1,4 +1,5 @@
-import React from "react";
+// Logic
+import { getProjects } from "@/logic/crudLogic";
 //Components
 import CreateProjectForm from "@/components/createProjectForm";
 import ProjectPreview from "@/components/projectPreview";
@@ -11,6 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 const Projects = async ({ searchParams }) => {
   // Search params
   const showCreateProject = searchParams.createProject;
+  const data = await getProjects();
 
   return (
     <div className="px-10 py-6">
@@ -31,18 +33,18 @@ const Projects = async ({ searchParams }) => {
               gridTemplateColumns: "repeat(auto-fill, 400px)",
             }}
           >
-{/*             {data.listProjects.items &&
-              data.listProjects.items.map((item, index) => (
+            {data &&
+              data.map((item, index) => (
                 <div key={item.id}>
                   <ProjectPreview
                     id={item.id}
                     name={item.name}
                     icon={item.icon}
                     desc={item.desc}
-                    createdAt={item.createdAt}
+                    created_at={item.created_at}
                   />
                 </div>
-              ))} */}
+              ))}
           </div>
         </div>
       </div>

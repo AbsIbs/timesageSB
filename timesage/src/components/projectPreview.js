@@ -1,7 +1,7 @@
 // NextJS
 import Link from "next/link";
 // Components
-/* import DeleteProjectUI from "./deleteProjectUI"; */
+import DeleteProjectUI from "./deleteProjectUI";
 // Icons
 import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
@@ -10,31 +10,6 @@ import CodeIcon from "@mui/icons-material/Code";
 import EventIcon from "@mui/icons-material/Event";
 
 const ProjectPreview = (props) => {
-  const dateObject = new Date(props.createdAt);
-
-  // Get day, month, and year
-  const day = dateObject.getDate();
-  const month = dateObject.toLocaleString("en-US", { month: "long" });
-  const year = dateObject.getFullYear();
-
-  // Function to get the ordinal indicator for a given day
-  const getOrdinalIndicator = (day) => {
-    if (day >= 11 && day <= 13) {
-      return "th";
-    }
-
-    switch (day % 10) {
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-      default:
-        return "th";
-    }
-  };
-
   const icons = {
     work: <WorkIcon sx={{ fontSize: "45px" }} />,
     school: <SchoolIcon sx={{ fontSize: "45px" }} />,
@@ -51,9 +26,15 @@ const ProjectPreview = (props) => {
     return text;
   };
 
-  // Add ordinal indicator to day
-  const ordinalIndicator = getOrdinalIndicator(day);
-  const formattedDate = `${day}${ordinalIndicator} ${month}, ${year}`;
+  // Format the date according to the desired format
+  // Parse the ISO 8601 string
+  const date = new Date(props.created_at);
+
+  const formattedDate = date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <>
@@ -75,7 +56,7 @@ const ProjectPreview = (props) => {
           >
             View
           </Link>
-          {/* <DeleteProjectUI id={props.id} /> */}
+          <DeleteProjectUI id={props.id} />
         </div>
       </div>
     </>

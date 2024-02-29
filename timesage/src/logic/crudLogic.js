@@ -67,3 +67,24 @@ export const createProject = async (formData) => {
     console.log(error);
   }
 };
+
+export const getProjects = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("project")
+    .select()
+    .order("created_at", { ascending: false });
+  console.log(data);
+  return data;
+};
+
+export const deleteProject = async (id) => {
+  const supabase = createClient();
+  const { error } = await supabase.from("project").delete().eq("id", id);
+  if (!error) {
+    revalidatePath("/dashboard/projects");
+    return { type: "success" };
+  } else {
+    console.log(error);
+  }
+};
