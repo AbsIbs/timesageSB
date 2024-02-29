@@ -18,7 +18,7 @@ export const checkUser = async () => {
 export const getUserName = async () => {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
-  return data.user.email;
+  return data.user.user_metadata.name;
 };
 
 export const logout = async () => {
