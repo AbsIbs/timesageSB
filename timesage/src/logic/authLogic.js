@@ -15,6 +15,12 @@ export const checkUser = async () => {
   }
 };
 
+export const getUserName = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  return data.user.email;
+};
+
 export const logout = async () => {
   // Initialise supabase client
   const supabase = createClient();
