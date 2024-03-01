@@ -1,9 +1,7 @@
 "use client";
 import { useContext, useState, useEffect, useRef } from "react";
-// Amplify
-/* import { API } from "aws-amplify";
-import { listProjects } from "@/graphql/queries";
-import { createEntryLogic } from "@/logic/entriesLogic"; */
+// Logic
+import { createEntry, getProjects } from "@/logic/crudLogic";
 // UI
 import { Modal } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
@@ -47,18 +45,18 @@ const StopwatchModal = () => {
     transform: "translate(-50%, -50%)",
   };
 
-/*   const getProjects = async () => {
-    const res = await API.graphql({ query: listProjects });
-    setProjects(res.data.listProjects.items);
+  const getProjectsHandler = async () => {
+    const projects = await getProjects();
+    setProjects(projects);
   };
 
   useEffect(() => {
     if (showModal && !prevShowModalRef.current) {
-      getProjects();
+      getProjectsHandler();
       console.log("fetched projects");
     }
     prevShowModalRef.current = showModal;
-  }, [showModal]); */
+  }, [showModal]);
 
   const changeHandler = (e) => {
     const selectedOption = e.target.options[e.target.selectedIndex];
@@ -69,10 +67,10 @@ const StopwatchModal = () => {
     });
   };
 
-/*   const submitHandler = async (details) => {
+    const submitHandler = async (details) => {
     setDescError(false);
     setNameError(false);
-    const res = await createEntryLogic(details);
+    const res = await createEntry(details);
     if (res.type == "descError") {
       setDescError(true);
       setErrorAlert(true);
@@ -87,7 +85,7 @@ const StopwatchModal = () => {
       setDesc("");
       setShowModal(false);
     }
-  }; */
+  };
 
   return (
     <>

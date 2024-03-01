@@ -18,18 +18,33 @@ const validate = (input, pattern) => {
   }
 };
 
-export const createEntry = async (props) => {
+export const createEntry = async (formData) => {
+  // Validate the form data
+  const result = {
+    name: validate(formData.name, nameRegex),
+    desc: validate(formData.desc, descRegex),
+  };
+  if (result.name || result.desc) {
+    // If at least one of the attributes fails the regex test
+    return { type: "error", name: result.name, desc: result.desc };
+  }
   const supabase = createClient();
-  const uid = await getUID();
   const { data, error } = await supabase.from("entry").insert([
     {
-      name: props.name,
-      time: props.time,
-      project_id: props.project,
+      name: formData.name,
+      time: formData.time,
+      desc: formData.desc,
+      project_id: formData.id,
     },
   ]);
   console.log(data, error);
-  return data;
+
+  if (error) {
+    revalidatePath("/dashboard/projects");
+    return { type: "error" };
+  } else {
+    return { type: "success" };
+  }
 };
 
 export const getEntries = async () => {
