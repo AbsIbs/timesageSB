@@ -18,20 +18,55 @@ const validate = (input, pattern) => {
   }
 };
 
+export const getProjects = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("project")
+    .select()
+    .order("created_at", { ascending: false });
+  console.log(data);
+  return data;
+};
+
+export const getProject = async (id) => {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("project").select().eq("id", id);
+  if (data) {
+    return data[0];
+  } else {
+    console.log(error);
+  }
+};
+
+export const deleteProject = async (id) => {
+  const supabase = createClient();
+  const { error } = await supabase.from("project").delete().eq("id", id);
+  if (!error) {
+    revalidatePath("/dashboard/projects");
+    return { type: "success" };
+  } else {
+    console.log(error);
+  }
+};
+
 export const createEntry = async (formData) => {
-  // Validate the form data
+  // Validate Project ID
+  const project = await getProject(formData.id);
+  console.log({ project: project });
+  if (!project) {
+    return { type: "projectError"};
+  }
+  // Validate the form description
   const result = {
-    name: validate(formData.name, nameRegex),
     desc: validate(formData.desc, descRegex),
   };
-  if (result.name || result.desc) {
-    // If at least one of the attributes fails the regex test
-    return { type: "error", name: result.name, desc: result.desc };
+  if (result.desc) {
+    return { type: "descError"};
   }
+
   const supabase = createClient();
   const { data, error } = await supabase.from("entry").insert([
     {
-      name: formData.name,
       time: formData.time,
       desc: formData.desc,
       project_id: formData.id,
@@ -40,9 +75,9 @@ export const createEntry = async (formData) => {
   console.log(data, error);
 
   if (error) {
-    revalidatePath("/dashboard/projects");
-    return { type: "error" };
+    return { type: "unknownError" };
   } else {
+    revalidatePath("/dashboard/projects");
     return { type: "success" };
   }
 };
@@ -86,33 +121,6 @@ export const createProject = async (formData) => {
       desc: formData.desc,
     },
   ]);
-  if (!error) {
-    revalidatePath("/dashboard/projects");
-    return { type: "success" };
-  } else {
-    console.log(error);
-  }
-};
-
-export const getProjects = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("project")
-    .select()
-    .order("created_at", { ascending: false });
-  console.log(data);
-  return data;
-};
-
-export const getProject = async (id) => {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("project").select().eq("id", id);
-  return data[0];
-};
-
-export const deleteProject = async (id) => {
-  const supabase = createClient();
-  const { error } = await supabase.from("project").delete().eq("id", id);
   if (!error) {
     revalidatePath("/dashboard/projects");
     return { type: "success" };

@@ -16,7 +16,7 @@ const StopwatchModal = () => {
   const maxDescNum = 100;
 
   const [desc, setDesc] = useState("");
-  const [nameError, setNameError] = useState(false);
+  const [projectNameError, setProjectNameError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -67,15 +67,33 @@ const StopwatchModal = () => {
     });
   };
 
-    const submitHandler = async (details) => {
+  const submitHandler = async (details) => {
     setDescError(false);
-    setNameError(false);
+    setProjectNameError(false);
     const res = await createEntry(details);
-    if (res.type == "descError") {
+    switch (res.type) {
+      case "projectError":
+        setProjectNameError(true);
+        setErrorAlert(true);
+        break;
+      case "descError":
+        setDescError(true);
+        setErrorAlert(true);
+        break;
+      case "unknownError":
+        setErrorAlert(true);
+        break;
+      case "success":
+        setSuccessAlert(true);
+        setProject("");
+        setDesc("");
+        setShowModal(false);
+    }
+/*     if (res.type == "descError") {
       setDescError(true);
       setErrorAlert(true);
-    } else if (res.type == "nameError" || res.type == "error") {
-      setNameError(true);
+    } else if (res.type == "projectError" || res.type == "error") {
+      setProjectNameError(true);
       setErrorAlert(true);
     } else if (res.type == "error") {
       setErrorAlert(true);
@@ -84,7 +102,7 @@ const StopwatchModal = () => {
       setProject("");
       setDesc("");
       setShowModal(false);
-    }
+    } */
   };
 
   return (
@@ -167,7 +185,9 @@ const StopwatchModal = () => {
                 label="Project"
                 onChange={changeHandler}
                 className={`p-2 rounded-md bg-surface border-2 border-line ${
-                  nameError ? "border-red-900 text-red-900" : "border-line"
+                  projectNameError
+                    ? "border-red-900 text-red-900"
+                    : "border-line"
                 }`}
               >
                 <option value="">Select a project</option>
