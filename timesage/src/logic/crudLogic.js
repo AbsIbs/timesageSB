@@ -56,6 +56,17 @@ export const getEntries = async () => {
   return data;
 };
 
+export const deleteEntry = async (id) => {
+  const supabase = createClient();
+  const { error } = await supabase.from("entry").delete().eq("id", id);
+  if (!error) {
+    revalidatePath("/dashboard/entries");
+    return { type: "success" };
+  } else {
+    console.log(error);
+  }
+};
+
 export const createProject = async (formData) => {
   // Validate the form data
   const result = {

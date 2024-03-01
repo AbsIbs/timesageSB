@@ -2,8 +2,8 @@
 //React
 import { useState } from "react";
 // Components
-/* import UpdateLogEntry from "./updateLogEntry";
-import DeleteEntry from "./deleteEntry"; */
+/* import UpdateLogEntry from "./updateLogEntry"; */
+import DeleteEntryUI from "./deleteEntryUI";
 // Material UI
 import { Modal } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -64,7 +64,7 @@ const EntriesTable = (props) => {
       {/* Delete Modal */}
       <Modal open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
         <div>
-          {/* <DeleteEntry id={selectedEntry.id} type={props.type} setModal={setShowDeleteModal} /> */}
+          <DeleteEntryUI id={selectedEntry.id} setModal={setShowDeleteModal} />
         </div>
       </Modal>
       {/* Content */}
@@ -96,7 +96,7 @@ const EntriesTable = (props) => {
                   className={`${index % 2 == 0 ? "" : "bg-surface"}`}
                 >
                   <TableCell className="text-on-surface border-0">
-                    {formatDate(row.createdAt)}
+                    {formatDate(row.created_at)}
                   </TableCell>
                   <TableCell className="text-on-surface border-0">
                     {row.name}

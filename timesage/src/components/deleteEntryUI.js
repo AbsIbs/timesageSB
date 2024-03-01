@@ -1,23 +1,22 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // Material UI
 import { Snackbar, Alert } from "@mui/material";
 // Logic
-import { deleteEntryLogic } from "@/logic/entriesLogic";
-// Icons
-import DeleteIcon from "@mui/icons-material/Delete";
+import { deleteEntry } from "@/logic/crudLogic";
 
-const DeleteEntry = (props) => {
+const DeleteEntryUI = (props) => {
   // Alerts
   const [successAlert, setSuccessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
 
   const HandleDelete = async (id) => {
+    console.log(id)
     setSuccessAlert(false);
     setErrorAlert(false);
     try {
-      const res = await deleteEntryLogic(id, props.type);
+      const res = await deleteEntry(id);
       if (res.type == "success") {
         setSuccessAlert(true);
         props.setModal(false);
@@ -29,10 +28,6 @@ const DeleteEntry = (props) => {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    console.log(props.id);
-  }, []);
 
   // Delete Modal style
   const deleteModalStyle = {
@@ -75,7 +70,7 @@ const DeleteEntry = (props) => {
       {/* Content */}
       <div
         style={deleteModalStyle}
-        className="flex flex-col border-line border bg-surface p-8 rounded-md gap-8 w-[600px]"
+        className="flex flex-col border-line border bg-surface p-8 rounded-md gap-10 w-[600px]"
       >
         {/* Title */}
         <div className="flex justify-between items-center">
@@ -83,7 +78,6 @@ const DeleteEntry = (props) => {
             <p className="text-3xl">Delete entry</p>
             <p>Are you sure you want to delete your entry?</p>
           </div>
-          <DeleteIcon style={{ fontSize: 60 }} />
         </div>
         {/* Buttons */}
         <div className="flex flex-row w-full gap-4">
@@ -105,4 +99,4 @@ const DeleteEntry = (props) => {
   );
 };
 
-export default DeleteEntry;
+export default DeleteEntryUI;
