@@ -6,16 +6,17 @@ import { getEntries } from "@/logic/crudLogic";
 import Loading from "./loading";
 import EntriesTable from "@/components/entriesTable";
 import ManualLogEntry from "@/components/manualLogEntry";
+import EntriesPagination from "@/components/entriesPagination";
 // Icons
 import AddIcon from "@mui/icons-material/Add";
 import ErrorIcon from "@mui/icons-material/Error";
 
 const Entries = async ({ searchParams }) => {
+  // Pagination settings
   const page = searchParams.page || 0;
   const perPage = searchParams.perPage || 5;
   // Get data
-  const data = await getEntries();
-  console.log(data)
+  const data = await getEntries(perPage);
   // Show manual entry
   const showManualEntry = searchParams.manualAddEntry;
 
@@ -37,11 +38,16 @@ const Entries = async ({ searchParams }) => {
         </div>
         {/* Table */}
         {data.length > 0 ? (
-          <EntriesTable data={data} />
+          <div className="flex flex-col">
+            <EntriesTable data={data} />
+            <EntriesPagination />
+          </div>
         ) : (
           <div className="w-full flex flex-col gap-4 items-center justify-center py-20">
             <ErrorIcon sx={{ width: 80, height: 80 }} />
-            <p className="text-sm">Nothing yet! Add some entries to view them here</p>
+            <p className="text-sm">
+              Nothing yet! Add some entries to view them here
+            </p>
           </div>
         )}
       </div>

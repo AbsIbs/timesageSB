@@ -9,8 +9,6 @@ import { createEntry, getProjects } from "@/logic/crudLogic";
 import { Modal } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { Snackbar, Alert } from "@mui/material";
-// Stopwatch Modal Context
-/* import { StopwatchModalContext } from "@/app/stopwatchModalContext"; */
 
 const ManualLogEntry = () => {
   // Router
@@ -26,7 +24,6 @@ const ManualLogEntry = () => {
   const [secondsError, setSecondsError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
-  /*   const { showModal, setShowModal } = useContext(StopwatchModalContext); */
 
   // DATETIME
   const [startedAt, setStartedAt] = useState(
