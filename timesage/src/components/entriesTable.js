@@ -96,7 +96,7 @@ const EntriesTable = (props) => {
                   className={`${index % 2 == 0 ? "" : "bg-surface"}`}
                 >
                   <TableCell className="text-on-surface border-0">
-                    {formatDate(row.created_at)}
+                    {formatDate(row.entry_date)}
                   </TableCell>
                   <TableCell className="text-on-surface border-0">
                     {row.project.name}

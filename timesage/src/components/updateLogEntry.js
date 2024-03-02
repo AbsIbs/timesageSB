@@ -13,8 +13,32 @@ const UpdateLogEntry = (props) => {
   const maxDescNum = 100;
   const [desc, setDesc] = useState(data.desc);
 
+  const formatDate = (dateString) => {
+    try {
+      // Parse the date-time string
+      const dateObj = new Date(dateString);
+
+      // Format the date components
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
+      const day = String(dateObj.getDate()).padStart(2, "0");
+
+      // Format the time components
+      const hours = String(dateObj.getHours()).padStart(2, "0");
+      const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+
+      // Construct the formatted date-time string
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    } catch (error) {
+      console.error("Error converting date-time:", error);
+      return null; // Or return a default value if conversion fails
+    }
+  };
+  const [entryDate, setEntryDate] = useState(formatDate(data.entry_date));
+
   // Retrieve the current values from the entry
-  const [nameProject, setProjectError] = useState(false);
+  const [dateTimeError, setDateTimeError] = useState(false);
+  const [nameProjectError, setProjectError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [timeError, setTimeError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -59,7 +83,7 @@ const UpdateLogEntry = (props) => {
     getProjectHandler();
   }, []);
 
-  const changeHandler = (e) => {
+  const projectChangeHandler = (e) => {
     const selectedOption = e.target.options[e.target.selectedIndex];
     const selectedId = selectedOption.getAttribute("id");
     setProject({
@@ -75,6 +99,10 @@ const UpdateLogEntry = (props) => {
     console.log(details);
     const res = await updateEntry(details);
     switch (res.type) {
+      case "dateTimeError":
+        setDateTimeError(true);
+        setErrorAlert(true);
+        break;
       case "timeError":
         setTimeError(true);
         setErrorAlert(true);
@@ -149,6 +177,7 @@ const UpdateLogEntry = (props) => {
                   hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000,
                 desc: desc,
                 project_id: project.id,
+                entry_date: entryDate,
               });
             }}
             className="flex flex-col gap-8"
@@ -207,13 +236,30 @@ const UpdateLogEntry = (props) => {
               </div>
             </div>
             <label className="flex flex-col gap-2">
+              Entry Date
+              <input
+                className={`p-2 rounded-md bg-surface border-2 border-line ${
+                  dateTimeError ? "border-red-900 text-red-900" : "border-line"
+                }`}
+                value={entryDate}
+                type="datetime-local"
+                name="entryDate"
+                onChange={(event) => {
+                  setEntryDate(event.target.value);
+                  console.log(event.target.value);
+                }}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
               Project
               <select
                 value={project.name}
                 label="Project"
-                onChange={changeHandler}
+                onChange={projectChangeHandler}
                 className={`p-2 rounded-md bg-surface border-2 border-line ${
-                  nameProject ? "border-red-900 text-red-900" : "border-line"
+                  nameProjectError
+                    ? "border-red-900 text-red-900"
+                    : "border-line"
                 }`}
               >
                 {projects.map((item) => {

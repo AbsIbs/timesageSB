@@ -4,6 +4,32 @@ import { revalidatePath } from "next/cache";
 // Supabase
 import { createClient } from "../../utils/supabase/server";
 
+// TIMESTAMP VALIDATION
+const datetimeToTimestamp = (datetimeString) => {
+  try {
+    // Parse the date-time string
+    const dateObj = new Date(datetimeString);
+
+    // Format the date components
+    const year = String(dateObj.getFullYear()).padStart(4, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const hours = String(dateObj.getHours()).padStart(2, "0");
+    const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+    const seconds = String(dateObj.getSeconds()).padStart(2, "0");
+    const milliseconds = String(dateObj.getMilliseconds()).padStart(3, "0");
+
+    // Construct the formatted date-time string in Supabase timestamp format
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+
+    return formattedDateTime;
+  } catch (error) {
+    console.error("Error converting date-time:", error);
+    return null; // Or return a default value if conversion fails
+  }
+};
+
+// TEXT VALIDATION
 // Server side check
 const nameRegex = /^.{1,30}$/;
 const descRegex = /^.{1,100}$/;
@@ -126,6 +152,13 @@ export const getEntries = async () => {
 
 export const updateEntry = async (props) => {
   const supabase = createClient();
+  // Validate datetime
+  try {
+    datetimeToTimestamp(props.entry_date);
+  } catch (error) {
+    console.log(error);
+    return { type: "dateTimeError" };
+  }
   // Validate description
   const descValidation = {
     desc: validate(props.desc, descRegex),
@@ -142,6 +175,10 @@ export const updateEntry = async (props) => {
   // Create a new object without the 'id' property
   const updatedFormData = { ...props }; // Create a shallow copy
   delete updatedFormData.id;
+  // Convert datetime of created_at value
+  updatedFormData.entry_date = datetimeToTimestamp(updatedFormData.entry_date);
+  console.log(updatedFormData);
+  // Upload to supabase
   const { error } = await supabase
     .from("entry")
     .update(updatedFormData)
