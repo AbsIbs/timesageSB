@@ -185,12 +185,18 @@ export const getEntries = async () => {
 };
 
 export const updateEntry = async (props) => {
-  // Validate Time
-  const timeResult = {
-    time: validate(props.time, timeRegex, "number"),
-  };
-  if (!timeResult.time) {
-    return { type: "timeError" };
+  // VALIDATE TIME
+  // Validate Hours
+  validateTime(props.hours, hoursRegex, "hoursError");
+  // Validate minutes
+  validateTime(props.minutes, minutesSecondsRegex, "minutesError");
+  // Validate hours
+  validateTime(props.seconds, minutesSecondsRegex, "secondsError");
+
+  // Calculate total time
+  const time = calculateTime(props);
+  if (time === 0) {
+    return { type: "totalTimeError" };
   }
   // Validate datetime
   try {
@@ -199,26 +205,29 @@ export const updateEntry = async (props) => {
     console.log(error);
     return { type: "dateTimeError" };
   }
+
   // Validate description
-  const descValidation = {
-    desc: validate(props.desc, descRegex, "string"),
-  };
-  if (descValidation.desc) {
+  // Validate the form description
+  if (!validate(props.desc, descRegex, "string")) {
     return { type: "descError" };
   }
   const supabase = createClient();
   // Validate Project ID
   const project = await getProject(props.project_id);
   if (!project) {
-    console.log("project does not exist");
     return { type: "projectError" };
   }
   // Create a new object without the 'id' property
   const updatedFormData = { ...props }; // Create a shallow copy
+  // Remove ID, Hours, Minutes and seconds key-pair values
   delete updatedFormData.id;
+  delete updatedFormData.hours;
+  delete updatedFormData.minutes;
+  delete updatedFormData.seconds;
+
+  updatedFormData.time = time;
   // Convert datetime of created_at value
   updatedFormData.started_at = datetimeToTimestamp(updatedFormData.started_at);
-  console.log(updatedFormData);
   // Upload to supabase
   const { error } = await supabase
     .from("entry")

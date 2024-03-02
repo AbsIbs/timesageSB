@@ -40,6 +40,9 @@ const UpdateLogEntry = (props) => {
   const [dateTimeError, setDateTimeError] = useState(false);
   const [nameProjectError, setProjectError] = useState(false);
   const [descError, setDescError] = useState(false);
+  const [hoursError, setHoursError] = useState();
+  const [minutesError, setMinutesError] = useState(false);
+  const [secondsError, setSecondsError] = useState(false);
   const [timeError, setTimeError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -103,8 +106,22 @@ const UpdateLogEntry = (props) => {
         setDateTimeError(true);
         setErrorAlert(true);
         break;
-      case "timeError":
-        setTimeError(true);
+      case "hoursError":
+        setHoursError(true);
+        setErrorAlert(true);
+        break;
+      case "minutesError":
+        setMinutesError(true);
+        setErrorAlert(true);
+        break;
+      case "secondsError":
+        setSecondsError(true);
+        setErrorAlert(true);
+        break;
+      case "totalTimeError":
+        setHoursError(true);
+        setMinutesError(true);
+        setSecondsError(true);
         setErrorAlert(true);
         break;
       case "descError":
@@ -173,8 +190,9 @@ const UpdateLogEntry = (props) => {
             action={() => {
               submitHandler({
                 id: data.id,
-                time:
-                  hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000,
+                seconds: seconds,
+                minutes: minutes,
+                hours: hours,
                 desc: desc,
                 project_id: project.id,
                 started_at: startedAt,
@@ -197,7 +215,7 @@ const UpdateLogEntry = (props) => {
                     setHours(numberValidation(event.target.value));
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
-                    timeError ? "border-red-900 text-red-900" : "border-line"
+                    hoursError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
               </div>
@@ -215,7 +233,7 @@ const UpdateLogEntry = (props) => {
                     setMinutes(numberValidation(event.target.value));
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
-                    timeError ? "border-red-900 text-red-900" : "border-line"
+                    minutesError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
               </div>
@@ -233,7 +251,7 @@ const UpdateLogEntry = (props) => {
                     setSeconds(numberValidation(event.target.value));
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
-                    timeError ? "border-red-900 text-red-900" : "border-line"
+                    secondsError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
               </div>
