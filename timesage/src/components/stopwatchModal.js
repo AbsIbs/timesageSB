@@ -71,7 +71,7 @@ const StopwatchModal = () => {
     setDescError(false);
     setProjectNameError(false);
     const res = await createEntry(details);
-    /* switch (res.type) {
+    switch (res.type) {
       case "projectError":
         setProjectNameError(true);
         setErrorAlert(true);
@@ -88,7 +88,7 @@ const StopwatchModal = () => {
         setProject("");
         setDesc("");
         setShowModal(false);
-    } */
+    }
   };
 
   return (

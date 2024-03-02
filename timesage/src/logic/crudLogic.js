@@ -30,7 +30,6 @@ const datetimeToTimestamp = (datetimeString) => {
 };
 
 // TEXT VALIDATION
-// Server side check
 const nameRegex = /^.{1,30}$/;
 const descRegex = /^.{1,100}$/;
 
@@ -42,6 +41,12 @@ const validate = (input, pattern) => {
     // Invalid input
     return true;
   }
+};
+
+// NUMBER VALIDATION
+const numberValidation = (value) => {
+  const newValue = value.replace(/[^0-9]/g, "");
+  return isNaN(Number(newValue)) ? null : Number(newValue);
 };
 
 // PROJECTS
@@ -108,7 +113,7 @@ export const createEntry = async (formData) => {
   const project = await getProject(formData.project_id);
   console.log({ project: project });
   if (!project) {
-    console.log('error validating project')
+    console.log("error validating project");
     return { type: "projectError" };
   }
   // Validate the form description
@@ -155,7 +160,7 @@ export const updateEntry = async (props) => {
   const supabase = createClient();
   // Validate datetime
   try {
-    datetimeToTimestamp(props.entry_date);
+    datetimeToTimestamp(props.started_at);
   } catch (error) {
     console.log(error);
     return { type: "dateTimeError" };
@@ -177,7 +182,7 @@ export const updateEntry = async (props) => {
   const updatedFormData = { ...props }; // Create a shallow copy
   delete updatedFormData.id;
   // Convert datetime of created_at value
-  updatedFormData.entry_date = datetimeToTimestamp(updatedFormData.entry_date);
+  updatedFormData.started_at = datetimeToTimestamp(updatedFormData.started_at);
   console.log(updatedFormData);
   // Upload to supabase
   const { error } = await supabase

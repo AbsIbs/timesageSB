@@ -18,23 +18,24 @@ const ManualLogEntry = () => {
 
   const maxDescNum = 100;
   const [desc, setDesc] = useState("");
+  const [dateTimeError, setDateTimeError] = useState(false);
   const [projectNameError, setProjectNameError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [timeError, setTimeError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
-/*   const { showModal, setShowModal } = useContext(StopwatchModalContext); */
+  /*   const { showModal, setShowModal } = useContext(StopwatchModalContext); */
+
+  // DATETIME
+  const [startedAt, setStartedAt] = useState(
+    new Date().toISOString().slice(0, 16)
+  );
 
   // TIME
   // Variables
   const [seconds, setSeconds] = useState("");
   const [minutes, setMinutes] = useState("");
   const [hours, setHours] = useState("");
-  // Numerical validation
-  const numberValidation = (value) => {
-    const newValue = value.replace(/[^0-9]/g, "");
-    return isNaN(Number(newValue)) ? null : Number(newValue);
-  };
 
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState("");
@@ -70,8 +71,35 @@ const ManualLogEntry = () => {
     setDescError(false);
     setProjectNameError(false);
     setTimeError(false);
+    console.log(details);
     const res = await createEntry(details);
-    if (res.type == "timeError") {
+    switch (res.type) {
+      case "dateTimeError":
+        setDateTimeError(true);
+        setErrorAlert(true);
+        break;
+      case "timeError":
+        setTimeError(true);
+        setErrorAlert(true);
+        break;
+      case "descError":
+        setDescError(true);
+        setErrorAlert(true);
+        break;
+      case "projectError":
+        setProjectNameError(true);
+        setErrorAlert(true);
+        break;
+      case "unknownError":
+        setErrorAlert(true);
+        break;
+      case "success":
+        setSuccessAlert(true);
+        setProject("");
+        setDesc("");
+        router.push("/dashboard/entries");
+    }
+    /*     if (res.type == "timeError") {
       setTimeError(true);
       setErrorAlert(true);
     }
@@ -88,7 +116,7 @@ const ManualLogEntry = () => {
       setProject("");
       setDesc("");
       router.push("/dashboard/entries");
-    }
+    } */
   };
 
   return (
@@ -138,10 +166,11 @@ const ManualLogEntry = () => {
           <form
             action={() => {
               submitHandler({
-                name: project.name,
-                time: 1000 * (seconds + minutes * 60 + hours * 60 * 60),
+                time:
+                  hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000,
                 desc: desc,
-                id: project.id,
+                project_id: project.id,
+                started_at: startedAt,
               });
             }}
             className="flex flex-col gap-8"
@@ -151,12 +180,13 @@ const ManualLogEntry = () => {
               {/* Hours */}
               <div className="flex flex-col items-center flex-1">
                 <input
-                  type="text"
+                  type="number"
                   value={hours}
                   maxLength={2}
+                  min={0}
                   placeholder="00"
                   onChange={(event) => {
-                    setHours(numberValidation(event.target.value));
+                    setHours(event.target.value);
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
                     timeError ? "border-red-900 text-red-900" : "border-line"
@@ -167,12 +197,14 @@ const ManualLogEntry = () => {
               :{/* Minutes */}
               <div className="flex flex-col items-center flex-1">
                 <input
-                  type="text"
+                  type="number"
                   value={minutes}
                   placeholder="00"
                   maxLength={2}
+                  min={0}
+                  max={59}
                   onChange={(event) => {
-                    setMinutes(numberValidation(event.target.value));
+                    setMinutes(event.target.value);
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
                     timeError ? "border-red-900 text-red-900" : "border-line"
@@ -183,12 +215,14 @@ const ManualLogEntry = () => {
               :{/* Seconds */}
               <div className="flex flex-col items-center flex-1">
                 <input
-                  type="text"
+                  type="number"
                   placeholder="00"
                   maxLength={2}
+                  max={59}
+                  min={0}
                   value={seconds}
                   onChange={(event) => {
-                    setSeconds(numberValidation(event.target.value));
+                    setSeconds(event.target.value);
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
                     timeError ? "border-red-900 text-red-900" : "border-line"
@@ -198,13 +232,30 @@ const ManualLogEntry = () => {
               </div>
             </div>
             <label className="flex flex-col gap-2">
+              Started
+              <input
+                className={`p-2 rounded-md bg-surface border-2 border-line ${
+                  dateTimeError ? "border-red-900 text-red-900" : "border-line"
+                }`}
+                value={startedAt}
+                type="datetime-local"
+                name="entryDate"
+                onChange={(event) => {
+                  setStartedAt(event.target.value);
+                  console.log(event.target.value);
+                }}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
               Project
               <select
                 value={project.name}
                 label="Project"
                 onChange={changeHandler}
                 className={`p-2 rounded-md bg-surface border-2 border-line ${
-                  projectNameError ? "border-red-900 text-red-900" : "border-line"
+                  projectNameError
+                    ? "border-red-900 text-red-900"
+                    : "border-line"
                 }`}
               >
                 <option value="">Select a project</option>

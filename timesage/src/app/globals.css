@@ -100,6 +100,19 @@ body {
   max-width: calc(100% - var(--sidebar-width));
 }
 
+/* Hide number input arrows */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* For Webkit/Blink browsers (Chrome, Safari, Opera) */
 /* width and height are for the "track" */
 /* Scrollbar width and height (for the "thumb") are set in ::-webkit-scrollbar-thumb */

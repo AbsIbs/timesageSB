@@ -34,7 +34,7 @@ const UpdateLogEntry = (props) => {
       return null; // Or return a default value if conversion fails
     }
   };
-  const [entryDate, setEntryDate] = useState(formatDate(data.entry_date));
+  const [startedAt, setStartedAt] = useState(formatDate(data.started_at));
 
   // Retrieve the current values from the entry
   const [dateTimeError, setDateTimeError] = useState(false);
@@ -177,7 +177,7 @@ const UpdateLogEntry = (props) => {
                   hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000,
                 desc: desc,
                 project_id: project.id,
-                entry_date: entryDate,
+                started_at: startedAt,
               });
             }}
             className="flex flex-col gap-8"
@@ -191,6 +191,7 @@ const UpdateLogEntry = (props) => {
                   type="number"
                   value={hours}
                   maxLength={2}
+                  min={0}
                   placeholder="00"
                   onChange={(event) => {
                     setHours(numberValidation(event.target.value));
@@ -208,6 +209,7 @@ const UpdateLogEntry = (props) => {
                   value={minutes}
                   placeholder="00"
                   maxLength={2}
+                  min={0}
                   max={59}
                   onChange={(event) => {
                     setMinutes(numberValidation(event.target.value));
@@ -224,6 +226,7 @@ const UpdateLogEntry = (props) => {
                   type="number"
                   placeholder="00"
                   maxLength={2}
+                  min={0}
                   max={59}
                   value={seconds}
                   onChange={(event) => {
@@ -241,11 +244,11 @@ const UpdateLogEntry = (props) => {
                 className={`p-2 rounded-md bg-surface border-2 border-line ${
                   dateTimeError ? "border-red-900 text-red-900" : "border-line"
                 }`}
-                value={entryDate}
+                value={startedAt}
                 type="datetime-local"
                 name="entryDate"
                 onChange={(event) => {
-                  setEntryDate(event.target.value);
+                  setStartedAt(event.target.value);
                   console.log(event.target.value);
                 }}
               />
