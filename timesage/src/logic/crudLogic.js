@@ -24,7 +24,6 @@ export const getProjects = async () => {
     .from("project")
     .select()
     .order("created_at", { ascending: false });
-  console.log(data);
   return data;
 };
 
@@ -84,6 +83,7 @@ export const createEntry = async (formData) => {
 
 export const getEntries = async () => {
   const supabase = createClient();
+  /* We inner join the project name using the id of the project on the entry */
   const { data, error } = await supabase
     .from("entry")
     .select(

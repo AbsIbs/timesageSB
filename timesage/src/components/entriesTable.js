@@ -2,7 +2,7 @@
 //React
 import { useState } from "react";
 // Components
-/* import UpdateLogEntry from "./updateLogEntry"; */
+import UpdateLogEntry from "./updateLogEntry";
 import DeleteEntryUI from "./deleteEntryUI";
 // Material UI
 import { Modal } from "@mui/material";
@@ -58,7 +58,7 @@ const EntriesTable = (props) => {
       {/* Edit Modal */}
       <Modal open={showEditModal} onClose={() => setShowEditModal(false)}>
         <div>
-          {/* <UpdateLogEntry data={selectedEntry} setModal={setShowEditModal} /> */}
+          <UpdateLogEntry data={selectedEntry} setModal={setShowEditModal} />
         </div>
       </Modal>
       {/* Delete Modal */}

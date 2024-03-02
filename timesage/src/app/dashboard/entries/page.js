@@ -15,7 +15,6 @@ const Entries = async ({ searchParams }) => {
   const perPage = searchParams.perPage || 5;
   // Get data
   const data = await getEntries();
-  console.log(data);
   // Show manual entry
   const showManualEntry = searchParams.manualAddEntry;
 

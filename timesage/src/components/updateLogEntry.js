@@ -2,20 +2,20 @@
 import { useState, useEffect } from "react";
 // NextJS
 import { useRouter } from "next/navigation";
-// Amplify
-import { API } from "aws-amplify";
-import { listProjects } from "@/graphql/queries";
 // UI
 import { Modal } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { Snackbar, Alert } from "@mui/material";
 // Logic
-import { updateEntryLogic } from "@/logic/entriesLogic";
+import { getProjects } from "@/logic/crudLogic";
 
 const UpdateLogEntry = (props) => {
   const data = props.data;
   // Router
   const router = useRouter();
+  useEffect(() => {
+    console.log(data.time);
+  }, []);
 
   const maxDescNum = 100;
   const [desc, setDesc] = useState(data.desc);
@@ -29,11 +29,11 @@ const UpdateLogEntry = (props) => {
 
   // TIME
   // Variables
-  const [hours, setHours] = useState(Math.floor(data.time / 3600000));
-  const [minutes, setMinutes] = useState(
-    Math.floor((data.time % 3600000) / 60000)
+  const [hours, setHours] = useState(Math.floor(data.time / 1000 / 60 / 60));
+  const [minutes, setMinutes] = useState(Math.floor(data.time / 60000));
+  const [seconds, setSeconds] = useState(
+    ((data.time % 60000) / 1000).toFixed(0)
   );
-  const [seconds, setSeconds] = useState(Math.floor((data.time % 60000) / 10000));
 
   // Numerical validation
   const numberValidation = (value) => {
@@ -44,7 +44,7 @@ const UpdateLogEntry = (props) => {
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState({
     id: data.projectEntriesId,
-    name: data.name,
+    name: data.project.name,
   });
 
   // Modal style
@@ -55,14 +55,13 @@ const UpdateLogEntry = (props) => {
     transform: "translate(-50%, -50%)",
   };
 
-  const getProjects = async () => {
-    const res = await API.graphql({ query: listProjects });
-    console.log(res.data.listProjects.items);
-    setProjects(res.data.listProjects.items);
+  const getProjectHandler = async () => {
+    const res = await getProjects();
+    setProjects(res);
   };
 
   useEffect(() => {
-    getProjects();
+    getProjectHandler();
   }, []);
 
   const changeHandler = (e) => {
@@ -78,7 +77,7 @@ const UpdateLogEntry = (props) => {
     setDescError(false);
     setNameError(false);
     setTimeError(false);
-    const res = await updateEntryLogic(details);
+    /* const res = await updateEntryLogic(details); */
     if (res.type == "timeError") {
       setTimeError(true);
       setErrorAlert(true);
