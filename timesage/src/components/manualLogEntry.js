@@ -1,38 +1,40 @@
 "use client";
-import { useContext, useState, useEffect, useRef } from "react";
-// Logic
+import { useContext, useState, useEffect } from "react";
+// NextJS
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+// Supabase Logic
 import { createEntry, getProjects } from "@/logic/crudLogic";
 // UI
 import { Modal } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { Snackbar, Alert } from "@mui/material";
 // Stopwatch Modal Context
-import { StopwatchModalContext } from "./stopwatchModalContext";
-import { StopwatchContext } from "./stopwatchContext";
+/* import { StopwatchModalContext } from "@/app/stopwatchModalContext"; */
 
-const StopwatchModal = () => {
-  const prevShowModalRef = useRef(false);
+const ManualLogEntry = () => {
+  // Router
+  const router = useRouter();
 
   const maxDescNum = 100;
-
   const [desc, setDesc] = useState("");
   const [projectNameError, setProjectNameError] = useState(false);
   const [descError, setDescError] = useState(false);
+  const [timeError, setTimeError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
+/*   const { showModal, setShowModal } = useContext(StopwatchModalContext); */
 
-  const { showModal, setShowModal } = useContext(StopwatchModalContext);
-
-  const { time } = useContext(StopwatchContext);
-
-  // Hours calculation
-  const hours = Math.floor(time / 360000);
-
-  // Minutes calculation
-  const minutes = Math.floor((time % 360000) / 6000);
-
-  // Seconds calculation
-  const seconds = Math.floor((time % 6000) / 1000);
+  // TIME
+  // Variables
+  const [seconds, setSeconds] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [hours, setHours] = useState("");
+  // Numerical validation
+  const numberValidation = (value) => {
+    const newValue = value.replace(/[^0-9]/g, "");
+    return isNaN(Number(newValue)) ? null : Number(newValue);
+  };
 
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState("");
@@ -51,12 +53,9 @@ const StopwatchModal = () => {
   };
 
   useEffect(() => {
-    if (showModal && !prevShowModalRef.current) {
-      getProjectsHandler();
-      console.log("fetched projects");
-    }
-    prevShowModalRef.current = showModal;
-  }, [showModal]);
+    getProjectsHandler();
+    console.log("fetched projects");
+  }, []);
 
   const changeHandler = (e) => {
     const selectedOption = e.target.options[e.target.selectedIndex];
@@ -70,25 +69,26 @@ const StopwatchModal = () => {
   const submitHandler = async (details) => {
     setDescError(false);
     setProjectNameError(false);
+    setTimeError(false);
     const res = await createEntry(details);
-    /* switch (res.type) {
-      case "projectError":
-        setProjectNameError(true);
-        setErrorAlert(true);
-        break;
-      case "descError":
-        setDescError(true);
-        setErrorAlert(true);
-        break;
-      case "unknownError":
-        setErrorAlert(true);
-        break;
-      case "success":
-        setSuccessAlert(true);
-        setProject("");
-        setDesc("");
-        setShowModal(false);
-    } */
+    if (res.type == "timeError") {
+      setTimeError(true);
+      setErrorAlert(true);
+    }
+    if (res.type == "descError") {
+      setDescError(true);
+      setErrorAlert(true);
+    } else if (res.type == "nameError") {
+      setProjectNameError(true);
+      setErrorAlert(true);
+    } else if (res.type == "error") {
+      setErrorAlert(true);
+    } else if (res.type == "success") {
+      setSuccessAlert(true);
+      setProject("");
+      setDesc("");
+      router.push("/dashboard/entries");
+    }
   };
 
   return (
@@ -121,7 +121,7 @@ const StopwatchModal = () => {
           Oops! There was a problem with adding your entry.
         </Alert>
       </Snackbar>
-      <Modal open={showModal} onClose={() => setShowModal(false)}>
+      <Modal open={true}>
         <div
           style={style}
           className="flex flex-col border-line border bg-surface p-8 rounded-md gap-8 w-[600px]"
@@ -134,35 +134,69 @@ const StopwatchModal = () => {
             </div>
             <FactCheckIcon style={{ fontSize: 60 }} />
           </div>
-          {/* Time header */}
-          <div className="flex text-4xl text-primary">
-            {/* Hours */}
-            <div className="flex flex-col items-center flex-1">
-              <p>{hours.toString().padStart(2, "0")}</p>
-              <p className="text-xs">hr</p>
-            </div>
-            :{/* Minutes */}
-            <div className="flex flex-col items-center flex-1">
-              <p>{minutes.toString().padStart(2, "0")}</p>
-              <p className="text-xs">min</p>
-            </div>
-            :{/* Seconds */}
-            <div className="flex flex-col items-center flex-1">
-              <p>{seconds.toString().padStart(2, "0")}</p>
-              <p className="text-xs">sec</p>
-            </div>
-          </div>
           {/* Form */}
           <form
             action={() => {
               submitHandler({
-                time: time,
+                name: project.name,
+                time: 1000 * (seconds + minutes * 60 + hours * 60 * 60),
                 desc: desc,
-                project_id: project.id,
+                id: project.id,
               });
             }}
             className="flex flex-col gap-8"
           >
+            {/* Time header */}
+            <div className="flex text-4xl text-primary">
+              {/* Hours */}
+              <div className="flex flex-col items-center flex-1">
+                <input
+                  type="text"
+                  value={hours}
+                  maxLength={2}
+                  placeholder="00"
+                  onChange={(event) => {
+                    setHours(numberValidation(event.target.value));
+                  }}
+                  className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
+                    timeError ? "border-red-900 text-red-900" : "border-line"
+                  }`}
+                />
+                <p className="text-xs">hr(s)</p>
+              </div>
+              :{/* Minutes */}
+              <div className="flex flex-col items-center flex-1">
+                <input
+                  type="text"
+                  value={minutes}
+                  placeholder="00"
+                  maxLength={2}
+                  onChange={(event) => {
+                    setMinutes(numberValidation(event.target.value));
+                  }}
+                  className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
+                    timeError ? "border-red-900 text-red-900" : "border-line"
+                  }`}
+                />
+                <p className="text-xs">min(s)</p>
+              </div>
+              :{/* Seconds */}
+              <div className="flex flex-col items-center flex-1">
+                <input
+                  type="text"
+                  placeholder="00"
+                  maxLength={2}
+                  value={seconds}
+                  onChange={(event) => {
+                    setSeconds(numberValidation(event.target.value));
+                  }}
+                  className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
+                    timeError ? "border-red-900 text-red-900" : "border-line"
+                  }`}
+                />
+                <p className="text-xs">sec(s)</p>
+              </div>
+            </div>
             <label className="flex flex-col gap-2">
               Project
               <select
@@ -170,9 +204,7 @@ const StopwatchModal = () => {
                 label="Project"
                 onChange={changeHandler}
                 className={`p-2 rounded-md bg-surface border-2 border-line ${
-                  projectNameError
-                    ? "border-red-900 text-red-900"
-                    : "border-line"
+                  projectNameError ? "border-red-900 text-red-900" : "border-line"
                 }`}
               >
                 <option value="">Select a project</option>
@@ -206,13 +238,13 @@ const StopwatchModal = () => {
               </div>
             </label>
             <div className="flex gap-2 justify-end">
-              <button
+              <Link
                 type="button"
-                onClick={() => setShowModal(false)}
+                href={"/dashboard/entries"}
                 className="flex justify-center items-center border border-line w-24 py-2 rounded-md hover:bg-on-surface hover:text-surface"
               >
                 Cancel
-              </button>
+              </Link>
               <button
                 type="submit"
                 className="flex justify-center items-center bg-primary w-24 py-2 rounded-md text-white"
@@ -227,4 +259,4 @@ const StopwatchModal = () => {
   );
 };
 
-export default StopwatchModal;
+export default ManualLogEntry;

@@ -105,9 +105,10 @@ export const deleteProject = async (id) => {
 // ENTRIES
 export const createEntry = async (formData) => {
   // Validate Project ID
-  const project = await getProject(formData.id);
+  const project = await getProject(formData.project_id);
   console.log({ project: project });
   if (!project) {
+    console.log('error validating project')
     return { type: "projectError" };
   }
   // Validate the form description
@@ -123,7 +124,7 @@ export const createEntry = async (formData) => {
     {
       time: formData.time,
       desc: formData.desc,
-      project_id: formData.id,
+      project_id: formData.project_id,
     },
   ]);
   console.log(data, error);

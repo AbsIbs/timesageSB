@@ -5,7 +5,7 @@ import { getEntries } from "@/logic/crudLogic";
 // Components
 import Loading from "./loading";
 import EntriesTable from "@/components/entriesTable";
-/* import ManualLogEntry from "@/components/manualLogEntry"; */
+import ManualLogEntry from "@/components/manualLogEntry";
 // Icons
 import AddIcon from "@mui/icons-material/Add";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -46,7 +46,7 @@ const Entries = async ({ searchParams }) => {
         )}
       </div>
       {/* Show the manual entry modal */}
-      {/* {showManualEntry && <ManualLogEntry />} */}
+      {showManualEntry && <ManualLogEntry />}
     </>
   );
 };
