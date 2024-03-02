@@ -18,6 +18,34 @@ const validate = (input, pattern) => {
   }
 };
 
+// PROJECTS
+export const createProject = async (formData) => {
+  // Validate the form data
+  const result = {
+    name: validate(formData.name, nameRegex),
+    desc: validate(formData.desc, descRegex),
+  };
+  if (result.name || result.desc || !formData.icon) {
+    // If at least one of the attributes fails the regex test
+    return { type: "error", name: result.name, desc: result.desc };
+  }
+
+  const supabase = createClient();
+  const { data, error } = await supabase.from("project").insert([
+    {
+      name: formData.name,
+      icon: formData.icon,
+      desc: formData.desc,
+    },
+  ]);
+  if (!error) {
+    revalidatePath("/dashboard/projects");
+    return { type: "success" };
+  } else {
+    console.log(error);
+  }
+};
+
 export const getProjects = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -48,6 +76,7 @@ export const deleteProject = async (id) => {
   }
 };
 
+// ENTRIES
 export const createEntry = async (formData) => {
   // Validate Project ID
   const project = await getProject(formData.id);
@@ -95,38 +124,42 @@ export const getEntries = async () => {
   return data;
 };
 
+export const updateEntry = async (props) => {
+  const supabase = createClient();
+  // Validate description
+  const descValidation = {
+    desc: validate(props.desc, descRegex),
+  };
+  if (descValidation.desc) {
+    return { type: "descError" };
+  }
+  // Validate Project ID
+  const project = await getProject(props.project_id);
+  if (!project) {
+    console.log("project does not exist");
+    return { type: "projectError" };
+  }
+  // Create a new object without the 'id' property
+  const updatedFormData = { ...props }; // Create a shallow copy
+  delete updatedFormData.id;
+  const { error } = await supabase
+    .from("entry")
+    .update(updatedFormData)
+    .eq("id", props.id);
+  if (error) {
+    console.log(error);
+    return { type: "unknownError" };
+  } else {
+    revalidatePath("/dashboard/entries");
+    return { type: "success" };
+  }
+};
+
 export const deleteEntry = async (id) => {
   const supabase = createClient();
   const { error } = await supabase.from("entry").delete().eq("id", id);
   if (!error) {
     revalidatePath("/dashboard/entries");
-    return { type: "success" };
-  } else {
-    console.log(error);
-  }
-};
-
-export const createProject = async (formData) => {
-  // Validate the form data
-  const result = {
-    name: validate(formData.name, nameRegex),
-    desc: validate(formData.desc, descRegex),
-  };
-  if (result.name || result.desc || !formData.icon) {
-    // If at least one of the attributes fails the regex test
-    return { type: "error", name: result.name, desc: result.desc };
-  }
-
-  const supabase = createClient();
-  const { data, error } = await supabase.from("project").insert([
-    {
-      name: formData.name,
-      icon: formData.icon,
-      desc: formData.desc,
-    },
-  ]);
-  if (!error) {
-    revalidatePath("/dashboard/projects");
     return { type: "success" };
   } else {
     console.log(error);

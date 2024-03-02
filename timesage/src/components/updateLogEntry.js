@@ -1,27 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
-// NextJS
-import { useRouter } from "next/navigation";
 // UI
 import { Modal } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { Snackbar, Alert } from "@mui/material";
 // Logic
-import { getProjects } from "@/logic/crudLogic";
+import { getProjects, updateEntry } from "@/logic/crudLogic";
 
 const UpdateLogEntry = (props) => {
   const data = props.data;
-  // Router
-  const router = useRouter();
-  useEffect(() => {
-    console.log(data.time);
-  }, []);
 
   const maxDescNum = 100;
   const [desc, setDesc] = useState(data.desc);
 
   // Retrieve the current values from the entry
-  const [nameError, setNameError] = useState(false);
+  const [nameProject, setProjectError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [timeError, setTimeError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -30,7 +23,9 @@ const UpdateLogEntry = (props) => {
   // TIME
   // Variables
   const [hours, setHours] = useState(Math.floor(data.time / 1000 / 60 / 60));
-  const [minutes, setMinutes] = useState(Math.floor(data.time / 60000));
+  const [minutes, setMinutes] = useState(
+    Math.floor((data.time % 3600000) / 60000)
+  );
   const [seconds, setSeconds] = useState(
     ((data.time % 60000) / 1000).toFixed(0)
   );
@@ -43,7 +38,7 @@ const UpdateLogEntry = (props) => {
 
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState({
-    id: data.projectEntriesId,
+    id: data.project_id,
     name: data.project.name,
   });
 
@@ -75,26 +70,31 @@ const UpdateLogEntry = (props) => {
 
   const submitHandler = async (details) => {
     setDescError(false);
-    setNameError(false);
+    setProjectError(false);
     setTimeError(false);
-    /* const res = await updateEntryLogic(details); */
-    if (res.type == "timeError") {
-      setTimeError(true);
-      setErrorAlert(true);
-    }
-    if (res.type == "descError") {
-      setDescError(true);
-      setErrorAlert(true);
-    } else if (res.type == "nameError") {
-      setNameError(true);
-      setErrorAlert(true);
-    } else if (res.type == "error") {
-      setErrorAlert(true);
-    } else if (res.type == "success") {
-      setSuccessAlert(true);
-      setProject("");
-      setDesc("");
-      props.setModal(false);
+    console.log(details);
+    const res = await updateEntry(details);
+    switch (res.type) {
+      case "timeError":
+        setTimeError(true);
+        setErrorAlert(true);
+        break;
+      case "descError":
+        setDescError(true);
+        setErrorAlert(true);
+        break;
+      case "projectError":
+        setProjectError(true);
+        setErrorAlert(true);
+        break;
+      case "unknownError":
+        setErrorAlert(true);
+        break;
+      case "success":
+        setSuccessAlert(true);
+        setProject("");
+        setDesc("");
+        props.setModal(false);
     }
   };
 
@@ -145,20 +145,21 @@ const UpdateLogEntry = (props) => {
             action={() => {
               submitHandler({
                 id: data.id,
-                name: project.name,
-                time: 1000 * (seconds + minutes * 60 + hours * 60 * 60),
+                time:
+                  hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000,
                 desc: desc,
-                projectEntriesId: project.id,
+                project_id: project.id,
               });
             }}
             className="flex flex-col gap-8"
           >
-            {/* Time header */}
-            <div className="flex text-4xl text-primary">
+            {/* Time container */}
+            <div className="flex text-4xl items-center text-primary gap-2">
               {/* Hours */}
-              <div className="flex flex-col items-center flex-1">
+              <div className="flex flex-col gap-1 flex-1">
+                <p className="text-xs">Hour(s)</p>
                 <input
-                  type="text"
+                  type="number"
                   value={hours}
                   maxLength={2}
                   placeholder="00"
@@ -169,15 +170,16 @@ const UpdateLogEntry = (props) => {
                     timeError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
-                <p className="text-xs">hr(s)</p>
               </div>
               :{/* Minutes */}
-              <div className="flex flex-col items-center flex-1">
+              <div className="flex flex-col gap-1 flex-1">
+                <p className="text-xs">Minute(s)</p>
                 <input
-                  type="text"
+                  type="number"
                   value={minutes}
                   placeholder="00"
                   maxLength={2}
+                  max={59}
                   onChange={(event) => {
                     setMinutes(numberValidation(event.target.value));
                   }}
@@ -185,14 +187,15 @@ const UpdateLogEntry = (props) => {
                     timeError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
-                <p className="text-xs">min(s)</p>
               </div>
               :{/* Seconds */}
-              <div className="flex flex-col items-center flex-1">
+              <div className="flex flex-col gap-1 flex-1">
+                <p className="text-xs">Second(s)</p>
                 <input
-                  type="text"
+                  type="number"
                   placeholder="00"
                   maxLength={2}
+                  max={59}
                   value={seconds}
                   onChange={(event) => {
                     setSeconds(numberValidation(event.target.value));
@@ -201,7 +204,6 @@ const UpdateLogEntry = (props) => {
                     timeError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
-                <p className="text-xs">sec(s)</p>
               </div>
             </div>
             <label className="flex flex-col gap-2">
@@ -211,10 +213,9 @@ const UpdateLogEntry = (props) => {
                 label="Project"
                 onChange={changeHandler}
                 className={`p-2 rounded-md bg-surface border-2 border-line ${
-                  nameError ? "border-red-900 text-red-900" : "border-line"
+                  nameProject ? "border-red-900 text-red-900" : "border-line"
                 }`}
               >
-                <option value="">Select a project</option>
                 {projects.map((item) => {
                   return (
                     <option key={item.id} value={item.name} id={item.id}>
