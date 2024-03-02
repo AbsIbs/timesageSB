@@ -54,14 +54,14 @@ export const createEntry = async (formData) => {
   const project = await getProject(formData.id);
   console.log({ project: project });
   if (!project) {
-    return { type: "projectError"};
+    return { type: "projectError" };
   }
   // Validate the form description
   const result = {
     desc: validate(formData.desc, descRegex),
   };
   if (result.desc) {
-    return { type: "descError"};
+    return { type: "descError" };
   }
 
   const supabase = createClient();
@@ -86,7 +86,11 @@ export const getEntries = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("entry")
-    .select()
+    .select(
+      `*, project (
+      name
+    )`
+    )
     .order("created_at", { ascending: false });
   return data;
 };

@@ -99,7 +99,7 @@ const EntriesTable = (props) => {
                     {formatDate(row.created_at)}
                   </TableCell>
                   <TableCell className="text-on-surface border-0">
-                    {row.name}
+                    {row.project.name}
                   </TableCell>
                   <TableCell className="text-on-surface border-0">
                     {formatDuration(row.time)}

@@ -89,20 +89,6 @@ const StopwatchModal = () => {
         setDesc("");
         setShowModal(false);
     }
-/*     if (res.type == "descError") {
-      setDescError(true);
-      setErrorAlert(true);
-    } else if (res.type == "projectError" || res.type == "error") {
-      setProjectNameError(true);
-      setErrorAlert(true);
-    } else if (res.type == "error") {
-      setErrorAlert(true);
-    } else if (res.type == "success") {
-      setSuccessAlert(true);
-      setProject("");
-      setDesc("");
-      setShowModal(false);
-    } */
   };
 
   return (
