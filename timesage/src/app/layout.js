@@ -4,6 +4,7 @@ import "./globals.css";
 import Provider from "./theme-provider";
 import { StopwatchProvider } from "@/components/stopwatchContext";
 import { StopwatchModalProvider } from "@/components/stopwatchModalContext";
+import { NextUIProvider } from "@nextui-org/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,13 +32,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={inter.className}>
-        <Provider>
-          <StopwatchModalProvider>
-            <StopwatchProvider>
-              <main className="flex-1">{children}</main>
-            </StopwatchProvider>
-          </StopwatchModalProvider>
-        </Provider>
+        <NextUIProvider>
+          <Provider>
+            <StopwatchModalProvider>
+              <StopwatchProvider>
+                <main className="flex-1">{children}</main>
+              </StopwatchProvider>
+            </StopwatchModalProvider>
+          </Provider>
+        </NextUIProvider>
       </body>
     </html>
   );
