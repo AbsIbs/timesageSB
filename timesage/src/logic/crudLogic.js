@@ -29,34 +29,51 @@ const datetimeToTimestamp = (datetimeString) => {
   }
 };
 
-// TEXT VALIDATION
+// INPUT VALIDATION
 const nameRegex = /^.{1,30}$/;
 const descRegex = /^.{1,100}$/;
+const hoursRegex = /^[0-9]|[1-9][0-9]$/;
+const minutesSecondsRegex = /^[0-5][0-9]$/;
 
-const validate = (input, pattern) => {
-  if (typeof input === "string" && pattern.test(input)) {
+const validate = (input, pattern, type) => {
+  if (typeof input === type && pattern.test(input)) {
     // Valid input
-    return false;
+    return true;
   } else {
     // Invalid input
-    return true;
+    return false;
   }
 };
 
-// NUMBER VALIDATION
-const numberValidation = (value) => {
-  const newValue = value.replace(/[^0-9]/g, "");
-  return isNaN(Number(newValue)) ? null : Number(newValue);
+const validateTime = (input, pattern, errorMessage) => {
+  try {
+    const tempValue = input === "" ? 0 : Number(input);
+    console.log(tempValue);
+    if (!validate(tempValue, pattern, "number")) {
+      return { type: errorMessage };
+    }
+  } catch (error) {
+    console.log(error);
+    return { type: errorMessage };
+  }
+};
+
+const calculateTime = (props) => {
+  return (
+    props.hours * 60 * 60 * 1000 +
+    props.minutes * 60 * 1000 +
+    props.seconds * 1000
+  );
 };
 
 // PROJECTS
 export const createProject = async (formData) => {
   // Validate the form data
   const result = {
-    name: validate(formData.name, nameRegex),
-    desc: validate(formData.desc, descRegex),
+    name: validate(formData.name, nameRegex, "string"),
+    desc: validate(formData.desc, descRegex, "string"),
   };
-  if (result.name || result.desc || !formData.icon) {
+  if (!result.name || !result.desc || !formData.icon) {
     // If at least one of the attributes fails the regex test
     return { type: "error", name: result.name, desc: result.desc };
   }
@@ -109,34 +126,45 @@ export const deleteProject = async (id) => {
 
 // ENTRIES
 export const createEntry = async (formData) => {
+  // VALIDATE TIME
+  // Validate Hours
+  validateTime(formData.hours, hoursRegex, "hoursError");
+  // Validate minutes
+  validateTime(formData.minutes, minutesSecondsRegex, "minutesError");
+  // Validate hours
+  validateTime(formData.seconds, minutesSecondsRegex, "secondsError");
+
+  // Calculate total time
+  const time = calculateTime(formData);
+  if (time === 0) {
+    return { type: "totalTimeError" };
+  }
+
   // Validate Project ID
   const project = await getProject(formData.project_id);
-  console.log({ project: project });
   if (!project) {
-    console.log("error validating project");
     return { type: "projectError" };
   }
   // Validate the form description
-  const result = {
-    desc: validate(formData.desc, descRegex),
-  };
-  if (result.desc) {
+  if (!validate(formData.desc, descRegex, "string")) {
     return { type: "descError" };
   }
 
   const supabase = createClient();
   const { data, error } = await supabase.from("entry").insert([
     {
-      time: formData.time,
+      started_at: formData.started_at,
+      time: time,
       desc: formData.desc,
       project_id: formData.project_id,
     },
   ]);
-  console.log(data, error);
 
   if (error) {
+    console.log(error);
     return { type: "unknownError" };
   } else {
+    console.log(data);
     revalidatePath("/dashboard/projects");
     return { type: "success" };
   }
@@ -157,7 +185,13 @@ export const getEntries = async () => {
 };
 
 export const updateEntry = async (props) => {
-  const supabase = createClient();
+  // Validate Time
+  const timeResult = {
+    time: validate(props.time, timeRegex, "number"),
+  };
+  if (!timeResult.time) {
+    return { type: "timeError" };
+  }
   // Validate datetime
   try {
     datetimeToTimestamp(props.started_at);
@@ -167,11 +201,12 @@ export const updateEntry = async (props) => {
   }
   // Validate description
   const descValidation = {
-    desc: validate(props.desc, descRegex),
+    desc: validate(props.desc, descRegex, "string"),
   };
   if (descValidation.desc) {
     return { type: "descError" };
   }
+  const supabase = createClient();
   // Validate Project ID
   const project = await getProject(props.project_id);
   if (!project) {

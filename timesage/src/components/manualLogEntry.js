@@ -21,7 +21,9 @@ const ManualLogEntry = () => {
   const [dateTimeError, setDateTimeError] = useState(false);
   const [projectNameError, setProjectNameError] = useState(false);
   const [descError, setDescError] = useState(false);
-  const [timeError, setTimeError] = useState(false);
+  const [hoursError, setHoursError] = useState();
+  const [minutesError, setMinutesError] = useState(false);
+  const [secondsError, setSecondsError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   /*   const { showModal, setShowModal } = useContext(StopwatchModalContext); */
@@ -70,16 +72,32 @@ const ManualLogEntry = () => {
   const submitHandler = async (details) => {
     setDescError(false);
     setProjectNameError(false);
-    setTimeError(false);
-    console.log(details);
+    // Time
+    setSecondsError(false);
+    setMinutesError(false);
+    setHoursError(false);
     const res = await createEntry(details);
     switch (res.type) {
       case "dateTimeError":
         setDateTimeError(true);
         setErrorAlert(true);
         break;
-      case "timeError":
-        setTimeError(true);
+      case "hoursError":
+        setHoursError(true);
+        setErrorAlert(true);
+        break;
+      case "minutesError":
+        setMinutesError(true);
+        setErrorAlert(true);
+        break;
+      case "secondsError":
+        setSecondsError(true);
+        setErrorAlert(true);
+        break;
+      case "totalTimeError":
+        setHoursError(true);
+        setMinutesError(true);
+        setSecondsError(true);
         setErrorAlert(true);
         break;
       case "descError":
@@ -99,24 +117,6 @@ const ManualLogEntry = () => {
         setDesc("");
         router.push("/dashboard/entries");
     }
-    /*     if (res.type == "timeError") {
-      setTimeError(true);
-      setErrorAlert(true);
-    }
-    if (res.type == "descError") {
-      setDescError(true);
-      setErrorAlert(true);
-    } else if (res.type == "nameError") {
-      setProjectNameError(true);
-      setErrorAlert(true);
-    } else if (res.type == "error") {
-      setErrorAlert(true);
-    } else if (res.type == "success") {
-      setSuccessAlert(true);
-      setProject("");
-      setDesc("");
-      router.push("/dashboard/entries");
-    } */
   };
 
   return (
@@ -166,8 +166,9 @@ const ManualLogEntry = () => {
           <form
             action={() => {
               submitHandler({
-                time:
-                  hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000,
+                seconds: seconds,
+                minutes: minutes,
+                hours: hours,
                 desc: desc,
                 project_id: project.id,
                 started_at: startedAt,
@@ -189,7 +190,7 @@ const ManualLogEntry = () => {
                     setHours(event.target.value);
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
-                    timeError ? "border-red-900 text-red-900" : "border-line"
+                    hoursError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
                 <p className="text-xs">hr(s)</p>
@@ -207,7 +208,7 @@ const ManualLogEntry = () => {
                     setMinutes(event.target.value);
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
-                    timeError ? "border-red-900 text-red-900" : "border-line"
+                    minutesError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
                 <p className="text-xs">min(s)</p>
@@ -225,7 +226,7 @@ const ManualLogEntry = () => {
                     setSeconds(event.target.value);
                   }}
                   className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
-                    timeError ? "border-red-900 text-red-900" : "border-line"
+                    secondsError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
                 <p className="text-xs">sec(s)</p>
