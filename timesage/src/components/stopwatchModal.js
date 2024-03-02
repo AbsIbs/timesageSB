@@ -156,7 +156,9 @@ const StopwatchModal = () => {
           <form
             action={() => {
               submitHandler({
-                time: time,
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds,
                 desc: desc,
                 project_id: project.id,
               });
