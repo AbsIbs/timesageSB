@@ -30,7 +30,6 @@ const AuthForm = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    bgcolor: `var(--surface)`,
     padding: 4,
     borderRadius: 2,
     display: "flex",
@@ -39,7 +38,7 @@ const AuthForm = () => {
   };
 
   return (
-    <Box sx={style}>
+    <Box className={"bg-surface"} sx={style}>
       {/* Loading */}
       <div>
         <Modal open={loading} className="flex items-center justify-center">
@@ -68,8 +67,7 @@ const AuthForm = () => {
             maxLength={maxNameNum}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ backgroundColor: "#121212" }}
-            className={`p-4 rounded-md border ${
+            className={`p-4 rounded-md border bg-input-background ${
               nameError ? "border-red-900 text-red-900" : "border-line"
             }`}
           />
@@ -81,8 +79,7 @@ const AuthForm = () => {
             maxLength={maxDescNum}
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
-            style={{ backgroundColor: "#121212" }}
-            className={`p-4 rounded-md bg-background border border-line ${
+            className={`p-4 rounded-md bg-input-background border border-line ${
               descError ? "border-red-900 text-red-900" : "border-line"
             }`}
           />
@@ -95,6 +92,12 @@ const AuthForm = () => {
           >
             Sign in
           </button>
+          <Link
+            className="p-4 w-100 rounded-md border border-line font-medium flex justify-center"
+            href={"/"}
+          >
+            Cancel
+          </Link>
         </div>
       </form>
     </Box>

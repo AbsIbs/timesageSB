@@ -31,10 +31,7 @@ const SignInWithGoogle = () => {
 
   return (
     <form action={logInWithGoogle} className="w-full">
-      <button
-        style={{ backgroundColor: "#121212" }}
-        className="flex gap-4 w-full rounded-md border border-line p-4 items-center justify-center"
-      >
+      <button className="flex gap-4 w-full rounded-md border border-line p-4 items-center justify-center bg-background">
         <GoogleIcon /> <p className="text-sm">Continue with Google</p>
       </button>
     </form>

@@ -1,8 +1,5 @@
 "use client";
 import { useState } from "react";
-import {
-  Pagination,
-} from "@nextui-org/react";
 
 const EntriesPagination = () => {
   const [page, setPage] = useState(2);
@@ -16,7 +13,7 @@ const EntriesPagination = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  return <Pagination isCompact showControls total={10} initialPage={1} />;
+  return null;
 };
 
 export default EntriesPagination;

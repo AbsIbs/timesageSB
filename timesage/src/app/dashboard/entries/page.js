@@ -40,7 +40,7 @@ const Entries = async ({ searchParams }) => {
         {data.length > 0 ? (
           <div className="flex flex-col">
             <EntriesTable data={data} />
-            <EntriesPagination />
+            {/* <EntriesPagination /> */}
           </div>
         ) : (
           <div className="w-full flex flex-col gap-4 items-center justify-center py-20">
