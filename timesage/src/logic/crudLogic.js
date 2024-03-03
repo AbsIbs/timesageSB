@@ -94,11 +94,11 @@ export const createProject = async (formData) => {
   }
 };
 
-export const getProjects = async () => {
+export const getProjects = async (props) => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("project")
-    .select()
+    .select("*")
     .order("created_at", { ascending: false });
   return data;
 };
@@ -170,8 +170,25 @@ export const createEntry = async (formData) => {
   }
 };
 
-export const getEntries = async () => {
+export const getTotalEntries = async () => {
   const supabase = createClient();
+  const { count, error } = await supabase
+    .from("entry")
+    .select("*", { count: "exact", head: true });
+  console.log(count);
+  return count;
+};
+
+export const getEntries = async (props) => {
+  console.log({ props: props });
+  const supabase = createClient();
+  // Offset calculation
+  const from = Number(props.page - 1) * Number(props.perPage);
+  const to = from + Number(props.perPage - 1);
+  console.log({
+    from: from,
+    to: to,
+  });
   /* We inner join the project name using the id of the project on the entry */
   const { data, error } = await supabase
     .from("entry")
@@ -180,6 +197,8 @@ export const getEntries = async () => {
       name
     )`
     )
+    .limit(props.perPage)
+    .range(from, to)
     .order("created_at", { ascending: false });
   return data;
 };

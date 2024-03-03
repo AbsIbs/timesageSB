@@ -1,7 +1,7 @@
 // NextJS
 import Link from "next/link";
 // Graphql Logic
-import { getEntries } from "@/logic/crudLogic";
+import { getEntries, getTotalEntries } from "@/logic/crudLogic";
 // Components
 import Loading from "./loading";
 import EntriesTable from "@/components/entriesTable";
@@ -12,10 +12,16 @@ import ErrorIcon from "@mui/icons-material/Error";
 
 const Entries = async ({ searchParams }) => {
   // Pagination settings
-  const page = searchParams.page || 0;
-  const perPage = searchParams.perPage || 5;
+  const page = searchParams.page || 1;
+  const perPage = searchParams.perPage || 10;
   // Get data
-  const data = await getEntries(perPage);
+  // Total entries
+  const total = await getTotalEntries();
+  // Paginated data
+  const data = await getEntries({
+    page: page,
+    perPage: perPage,
+  });
   // Show manual entry
   const showManualEntry = searchParams.manualAddEntry;
 
@@ -38,7 +44,7 @@ const Entries = async ({ searchParams }) => {
         {/* Table */}
         {data.length > 0 ? (
           <div className="flex flex-col">
-            <EntriesTable data={data} />
+            <EntriesTable data={data} total={total} />
           </div>
         ) : (
           <div className="w-full flex flex-col gap-4 items-center justify-center py-20">

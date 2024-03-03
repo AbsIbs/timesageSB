@@ -122,7 +122,7 @@ const EntriesTable = (props) => {
         </Table>
       </TableContainer>
       {/* Pagination */}
-      <EntriesPagination />
+      <EntriesPagination total={props.total} />
     </>
   );
 };
