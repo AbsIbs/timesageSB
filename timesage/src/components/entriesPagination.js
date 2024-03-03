@@ -1,23 +1,25 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+// NextJS
+import { useRouter, useSearchParams } from "next/navigation";
 // UI
 import { Pagination } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
 
 const EntriesPagination = () => {
-  const [page, setPage] = useState(2);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
+  // Router config
+  const router = useRouter();
+  const params = useSearchParams();
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = (newPage) => {
+    router.push(`/dashboard/entries/?page=${newPage}`);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    router.push(`/dashboard/entries/?page=0&perPage=${event.target.value}`);
   };
 
-  const rows = [
+  const rowOptions = [
     { label: "10", value: 10 },
     { label: "25", value: 25 },
     { label: "50", value: 50 },
@@ -27,18 +29,26 @@ const EntriesPagination = () => {
     <div className="py-4 flex justify-between items-center">
       {/* Rows per page selector */}
       <Select
-        className="min-w-0 w-40"
+        className="min-w-0 w-[140px]"
         variant={variant}
         label="Rows per page"
-        placeholder="25"
+        placeholder={params.get("perPage") || "25"}
+        value={parseInt(params.get("perPage")) || 25}
+        onChange={(e) => handleChangeRowsPerPage(e)}
       >
-        {rows.map((row) => (
+        {rowOptions.map((row) => (
           <SelectItem key={row.value} value={row.value}>
             {row.label}
           </SelectItem>
         ))}
       </Select>
-      <Pagination isCompact showControls total={10} initialPage={1} />
+      <Pagination
+        isCompact
+        onChange={(num) => handleChangePage(num)}
+        showControls
+        total={10}
+        initialPage={1}
+      />
     </div>
   );
 };
