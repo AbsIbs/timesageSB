@@ -13,7 +13,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CodeIcon from "@mui/icons-material/Code";
 import EventIcon from "@mui/icons-material/Event";
 // UI
-/* import UpdateProjectUI from "@/components/updateProjectUI"; */
+import UpdateProjectUI from "@/components/updateProjectUI";
 import DeleteProjectUI from "@/components/deleteProjectUI";
 
 const Page = async (searchParams) => {
@@ -50,12 +50,12 @@ const Page = async (searchParams) => {
               <h1 className="font-medium text-xl">{project.name}</h1>
             </div>
             <div className="flex gap-2">
-              {/*               <UpdateProjectUI
-                name={project?.data.getProject?.name}
-                desc={project?.data.getProject?.desc}
-                icon={project?.data.getProject?.icon}
-                id={project?.data.getProject?.id}
-              /> */}
+              <UpdateProjectUI
+                name={project.name}
+                desc={project.desc}
+                icon={project.icon}
+                id={project.id}
+              />
               <DeleteProjectUI id={id} />
             </div>
           </div>

@@ -113,6 +113,40 @@ export const getProject = async (id) => {
   }
 };
 
+export const updateProject = async (props) => {
+  // Validate icons
+  const iconsArray = ["work", "school", "libraryBooks", "code", "event"];
+  if (!iconsArray.includes(props.icon)) {
+    return { type: "iconError" };
+  }
+  // Validate project name
+  if (!validate(props.name, nameRegex, "string")) {
+    return { type: "nameError" };
+  }
+  // Validate the form description
+  if (!validate(props.desc, descRegex, "string")) {
+    return { type: "descError" };
+  }
+  const supabase = createClient();
+  // Create a new object without the 'id' property
+  const updatedFormData = { ...props }; // Create a shallow copy
+  // Remove ID, Hours, Minutes and seconds key-pair values
+  delete updatedFormData.id;
+  // Upload to supabase
+  const { error } = await supabase
+    .from("project")
+    .update(updatedFormData)
+    .eq("id", props.id);
+  if (error) {
+    console.log({ error: `there was an error! ${error}` });
+    return { type: "unknownError" };
+  } else {
+    console.log('it updated')
+    revalidatePath(`/dashboard/projects/${props.id}`);
+    return { type: "success" };
+  }
+};
+
 export const deleteProject = async (id) => {
   const supabase = createClient();
   const { error } = await supabase.from("project").delete().eq("id", id);
