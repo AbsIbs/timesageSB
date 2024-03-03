@@ -94,7 +94,7 @@ export const createProject = async (formData) => {
   }
 };
 
-export const getProjects = async (props) => {
+export const getProjects = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("project")
@@ -170,25 +170,46 @@ export const createEntry = async (formData) => {
   }
 };
 
-export const getTotalEntries = async () => {
+export const getTotalEntries = async (id) => {
   const supabase = createClient();
-  const { count, error } = await supabase
-    .from("entry")
-    .select("*", { count: "exact", head: true });
-  console.log(count);
-  return count;
+  if (id) {
+    const { count, error } = await supabase
+      .from("entry")
+      .select("*", { count: "exact", head: true })
+      .eq("project_id", id);
+    return count;
+  } else {
+    const { count, error } = await supabase
+      .from("entry")
+      .select("*", { count: "exact", head: true });
+    return count;
+  }
 };
 
-export const getEntries = async (props) => {
-  console.log({ props: props });
+export const getProjectEntries = async (props) => {
   const supabase = createClient();
   // Offset calculation
   const from = Number(props.page - 1) * Number(props.perPage);
   const to = from + Number(props.perPage - 1);
-  console.log({
-    from: from,
-    to: to,
-  });
+  console.log({ from: from, to: to });
+  const { data, error } = await supabase
+    .from("entry")
+    .select(
+      `*, project (
+      name
+    )`
+    )
+    .eq("project_id", props.id)
+    .range(from, to)
+    .order("started_at", { ascending: false });
+  return data;
+};
+
+export const getEntries = async (props) => {
+  const supabase = createClient();
+  // Offset calculation
+  const from = Number(props.page - 1) * Number(props.perPage);
+  const to = from + Number(props.perPage - 1);
   /* We inner join the project name using the id of the project on the entry */
   const { data, error } = await supabase
     .from("entry")
@@ -199,7 +220,7 @@ export const getEntries = async (props) => {
     )
     .limit(props.perPage)
     .range(from, to)
-    .order("created_at", { ascending: false });
+    .order("started_at", { ascending: false });
   return data;
 };
 

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 // NextJS
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 // UI
 import { Pagination } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
@@ -10,12 +10,13 @@ const EntriesPagination = (props) => {
   // Router config
   const router = useRouter();
   const params = useSearchParams();
+  const path = usePathname();
 
   const minRows = 10;
 
   const handleChangePage = (newPage) => {
     router.push(
-      `/dashboard/entries/?page=${newPage}&perPage=${
+      `${path}/?page=${newPage}&perPage=${
         params.get("perPage") || minRows
       }`
     );
@@ -28,13 +29,12 @@ const EntriesPagination = (props) => {
     setSeed(Math.random());
   };
   const handleChangeRowsPerPage = (event) => {
-    router.push(`/dashboard/entries/?page=1&perPage=${event.target.value}`);
+    router.push(`${path}/?page=1&perPage=${event.target.value}`);
     // After the rows per page is changed, the pagination component is reset. Resetting the UI as well
     reset();
   };
 
   const rowOptions = [
-    { label: "5", value: 5 },
     { label: minRows.toString(), value: minRows },
     { label: "25", value: 25 },
     { label: "50", value: 50 },
@@ -43,9 +43,7 @@ const EntriesPagination = (props) => {
   const totalPages = Math.ceil(
     props.total / (params.get("perPage") || minRows)
   );
-  useEffect(() => {
-    console.log(props.total);
-  }, []);
+
   return (
     <div className="py-4 flex justify-between items-center">
       {/* Rows per page selector */}

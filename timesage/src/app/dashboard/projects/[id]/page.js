@@ -1,8 +1,11 @@
 // Components
 import EntriesTable from "@/components/entriesTable";
 // Backend logic
-import { getProject } from "@/logic/crudLogic";
-/* import { projectEntriesLogic } from "@/logic/entriesLogic"; */
+import {
+  getProject,
+  getProjectEntries,
+  getTotalEntries,
+} from "@/logic/crudLogic";
 // Icons
 import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
@@ -14,12 +17,21 @@ import EventIcon from "@mui/icons-material/Event";
 import DeleteProjectUI from "@/components/deleteProjectUI";
 
 const Page = async (searchParams) => {
+  // Project Information
   const id = searchParams.params.id;
-  console.log(id)
   const project = await getProject(id);
-/*   const resEntries = await projectEntriesLogic(id);
-  const data = resEntries?.items; */
-  console.log(project);
+  // Pagination settings
+  const page = searchParams.searchParams.page || 1;
+  const perPage = searchParams.searchParams.perPage || 10;
+  // Total entries
+  const total = await getTotalEntries(id);
+  // Paginated data
+  const data = await getProjectEntries({
+    id: id,
+    page: page,
+    perPage: perPage,
+  });
+
   const icons = {
     work: <WorkIcon sx={{ fontSize: "50px" }} />,
     school: <SchoolIcon sx={{ fontSize: "50px" }} />,
@@ -35,12 +47,10 @@ const Page = async (searchParams) => {
           <div className="flex w-full justify-between">
             <div className="flex gap-4 items-center justify-center">
               {icons[project.icon]}
-              <h1 className="font-medium text-xl">
-                {project.name}
-              </h1>
+              <h1 className="font-medium text-xl">{project.name}</h1>
             </div>
             <div className="flex gap-2">
-{/*               <UpdateProjectUI
+              {/*               <UpdateProjectUI
                 name={project?.data.getProject?.name}
                 desc={project?.data.getProject?.desc}
                 icon={project?.data.getProject?.icon}
@@ -49,7 +59,19 @@ const Page = async (searchParams) => {
               <DeleteProjectUI id={id} />
             </div>
           </div>
-          {/* <EntriesTable data={data} type={'projects'} /> */}
+          {/* Table */}
+          {data.length > 0 ? (
+            <div className="flex flex-col">
+              <EntriesTable data={data} total={total} />
+            </div>
+          ) : (
+            <div className="w-full flex flex-col gap-4 items-center justify-center py-20">
+              <ErrorIcon sx={{ width: 80, height: 80 }} />
+              <p className="text-sm">
+                Nothing yet! Add some entries to view them here
+              </p>
+            </div>
+          )}
         </div>
       )}
     </>
