@@ -1,13 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+// NextJS
+import { useRouter, usePathname } from "next/navigation";
 // UI
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Alert, Snackbar, CircularProgress } from "@mui/material";
 // Logic
 import { deleteProject } from "@/logic/crudLogic";
 
 const DeleteProjectUI = (props) => {
+  const router = useRouter();
+  const path = usePathname();
+
+  useEffect(() => {
+    console.log(path);
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -29,6 +37,10 @@ const DeleteProjectUI = (props) => {
       if (res?.type == "error") {
         setErrorAlert(true);
       } else {
+        /* If the user is inside a project then we reroute them back to all projects */
+        if (path != "/dashboard/projects") {
+          router.push("/dashboard/projects");
+        }
         setSuccessAlert(true);
       }
       setLoading(false);
@@ -85,12 +97,15 @@ const DeleteProjectUI = (props) => {
           <Modal open={loading} className="flex items-center justify-center">
             <CircularProgress />
           </Modal>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            <p>
-              Are you sure you would like to delete this project? This will
-              delete ALL entries related to the project.
-            </p>
-          </Typography>
+          <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-2">
+              <p className="text-3xl">Delete project</p>
+              <p>
+                Deleting it will delete ALL of its associated entries. THIS
+                CANNOT BE REVERSED!
+              </p>
+            </div>
+          </div>
           <form
             action={() => {
               handleSubmission(props.id);
@@ -102,7 +117,7 @@ const DeleteProjectUI = (props) => {
                 onClick={() => setDeleteModal(false)}
                 className="py-2 rounded-md border-2 border-line flex flex-1 justify-center items-center "
               >
-                On second thought...
+                No
               </button>
               <button
                 type="submit"
