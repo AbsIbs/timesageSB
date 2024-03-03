@@ -4,6 +4,7 @@ import { useState } from "react";
 // Components
 import UpdateLogEntry from "./updateLogEntry";
 import DeleteEntryUI from "./deleteEntryUI";
+import EntriesPagination from "./entriesPagination";
 // Material UI
 import { Modal } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -120,7 +121,8 @@ const EntriesTable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <EntryTablePagination /> */}
+      {/* Pagination */}
+      <EntriesPagination />
     </>
   );
 };

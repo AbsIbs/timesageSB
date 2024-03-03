@@ -6,7 +6,6 @@ import { getEntries } from "@/logic/crudLogic";
 import Loading from "./loading";
 import EntriesTable from "@/components/entriesTable";
 import ManualLogEntry from "@/components/manualLogEntry";
-import EntriesPagination from "@/components/entriesPagination";
 // Icons
 import AddIcon from "@mui/icons-material/Add";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -40,7 +39,6 @@ const Entries = async ({ searchParams }) => {
         {data.length > 0 ? (
           <div className="flex flex-col">
             <EntriesTable data={data} />
-            {/* <EntriesPagination /> */}
           </div>
         ) : (
           <div className="w-full flex flex-col gap-4 items-center justify-center py-20">

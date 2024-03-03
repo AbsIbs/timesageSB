@@ -1,13 +1,12 @@
 // NextJS
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+
 // Logos
 import nextJS from "/public/logos/nextJsLogo@2x.svg";
 import reactLogo from "/public/logos/reactLogo@2x.svg";
 import tailwindcssLogo from "/public/logos/tailwindcssLogo@2x.svg";
-// Supabase
-import { createClient } from "../../utils/supabase/server";
+
 // Icons
 import {
   WatchLater as WatchLaterIcon,
@@ -16,8 +15,6 @@ import {
   GitHub as GitHubIcon,
   LinkedIn as LinkedInIcon,
 } from "@mui/icons-material";
-// Components
-import SignInWithGoogle from "@/components/signInWithGoogle";
 
 export default async function Home({ params }) {
 
