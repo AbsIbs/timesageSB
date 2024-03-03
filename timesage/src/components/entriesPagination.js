@@ -12,11 +12,23 @@ const EntriesPagination = () => {
   const params = useSearchParams();
 
   const handleChangePage = (newPage) => {
-    router.push(`/dashboard/entries/?page=${newPage}`);
+    router.push(
+      `/dashboard/entries/?page=${newPage}&perPage=${
+        params.get("perPage") || 10
+      }`
+    );
   };
 
+  // Create a state and use it as the key for the pagination component
+  const [seed, setSeed] = useState(1);
+  // When the key changes, the state is reset
+  const reset = () => {
+    setSeed(Math.random());
+  };
   const handleChangeRowsPerPage = (event) => {
     router.push(`/dashboard/entries/?page=0&perPage=${event.target.value}`);
+    // After the rows per page is changed, the pagination component is reset. Resetting the UI as well
+    reset();
   };
 
   const rowOptions = [
@@ -32,8 +44,8 @@ const EntriesPagination = () => {
         className="min-w-0 w-[140px]"
         variant={variant}
         label="Rows per page"
-        placeholder={params.get("perPage") || "25"}
-        value={parseInt(params.get("perPage")) || 25}
+        placeholder={params.get("perPage") || "10"}
+        value={parseInt(params.get("perPage")) || 10}
         onChange={(e) => handleChangeRowsPerPage(e)}
       >
         {rowOptions.map((row) => (
@@ -43,11 +55,12 @@ const EntriesPagination = () => {
         ))}
       </Select>
       <Pagination
+        key={seed}
         isCompact
         onChange={(num) => handleChangePage(num)}
         showControls
         total={10}
-        initialPage={1}
+        onReset={() => console.log("reset")}
       />
     </div>
   );
