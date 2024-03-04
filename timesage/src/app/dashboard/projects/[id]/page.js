@@ -12,9 +12,11 @@ import SchoolIcon from "@mui/icons-material/School";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CodeIcon from "@mui/icons-material/Code";
 import EventIcon from "@mui/icons-material/Event";
+import ErrorIcon from "@mui/icons-material/Error";
 // UI
 import UpdateProjectUI from "@/components/updateProjectUI";
 import DeleteProjectUI from "@/components/deleteProjectUI";
+
 
 const Page = async (searchParams) => {
   // Project Information

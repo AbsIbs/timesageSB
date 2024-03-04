@@ -48,7 +48,6 @@ const CreateProjectForm = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    bgcolor: `var(--surface)`,
     padding: 4,
     borderRadius: 2,
     display: "flex",
@@ -107,7 +106,7 @@ const CreateProjectForm = () => {
         </Alert>
       </Snackbar>
       <Modal aria-labelledby="unstyled-modal-title" open={true}>
-        <Box sx={style}>
+        <Box sx={style} className={"bg-surface"}>
           {/* Loading */}
           <div>
             <Modal open={loading} className="flex items-center justify-center">
@@ -133,18 +132,15 @@ const CreateProjectForm = () => {
               <div className="flex gap-2">
                 {iconsArray.map((name, index) => {
                   return (
-                    <div
+                    <button
                       key={index}
                       name="icon"
                       onClick={() => setIcon(name)}
-                      className="flex justify-center items-center p-6 rounded-md border-2"
-                      style={{
-                        borderColor:
-                          name === icon ? `var(--primary)` : `var(--line)`,
-                      }}
+                      type="button"
+                      className={`bg-background flex justify-center items-center p-6 rounded-md border-2 ${name==icon? 'border-primary': 'border-line'}`}
                     >
                       {icons[name]}
-                    </div>
+                    </button>
                   );
                 })}
               </div>

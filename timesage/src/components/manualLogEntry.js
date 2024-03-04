@@ -186,7 +186,7 @@ const ManualLogEntry = () => {
                   onChange={(event) => {
                     setHours(event.target.value);
                   }}
-                  className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
+                  className={`w-full rounded-md border-2 border-line bg-background text-center py-2 ${
                     hoursError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
@@ -204,7 +204,7 @@ const ManualLogEntry = () => {
                   onChange={(event) => {
                     setMinutes(event.target.value);
                   }}
-                  className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
+                  className={`w-full rounded-md border-2 border-line bg-background text-center py-2 ${
                     minutesError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
@@ -222,7 +222,7 @@ const ManualLogEntry = () => {
                   onChange={(event) => {
                     setSeconds(event.target.value);
                   }}
-                  className={`w-full rounded-md border-2 border-line bg-transparent text-center py-2 ${
+                  className={`w-full rounded-md border-2 border-line bg-background text-center py-2 ${
                     secondsError ? "border-red-900 text-red-900" : "border-line"
                   }`}
                 />
@@ -232,7 +232,7 @@ const ManualLogEntry = () => {
             <label className="flex flex-col gap-2">
               Started
               <input
-                className={`p-2 rounded-md bg-surface border-2 border-line ${
+                className={`p-2 rounded-md bg-background border-2 border-line ${
                   dateTimeError ? "border-red-900 text-red-900" : "border-line"
                 }`}
                 value={startedAt}
@@ -250,7 +250,7 @@ const ManualLogEntry = () => {
                 value={project.name}
                 label="Project"
                 onChange={changeHandler}
-                className={`p-2 rounded-md bg-surface border-2 border-line ${
+                className={`p-2 rounded-md bg-background border-2 border-line ${
                   projectNameError
                     ? "border-red-900 text-red-900"
                     : "border-line"

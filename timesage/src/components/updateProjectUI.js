@@ -137,7 +137,7 @@ const UpdateProjectUI = (props) => {
             className="flex flex-col"
           >
             <label htmlFor="projectIcon" className="py-6 flex flex-col gap-2">
-              pChoose an icon
+              Choose an icon
               <div className="flex gap-2">
                 {iconsArray.map((name, index) => {
                   return (
@@ -146,7 +146,7 @@ const UpdateProjectUI = (props) => {
                       name="icon"
                       type={"button"}
                       onClick={() => setIcon(name)}
-                      className={`flex justify-center items-center p-6 rounded-md border-2 ${
+                      className={`flex justify-center bg-background items-center p-6 rounded-md border-2 ${
                         name == icon ? `border-primary` : `border-line`
                       }`}
                     >
