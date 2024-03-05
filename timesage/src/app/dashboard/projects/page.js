@@ -21,7 +21,7 @@ const Projects = async ({ searchParams }) => {
         <h2 className="font-light">Create and manage specific projects</h2>
         <div className="py-8 flex flex-col gap-4">
           <Link
-            className="h-40 border border-line rounded bg-surface flex items-center justify-center w-40"
+            className="h-40 rounded bg-card flex items-center justify-center w-40"
             href={`?createProject=true`}
           >
             <AddIcon sx={{ fontSize: "50px" }} />

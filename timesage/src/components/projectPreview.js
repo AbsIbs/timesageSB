@@ -38,7 +38,7 @@ const ProjectPreview = (props) => {
 
   return (
     <>
-      <div className="bg-surface p-6 flex flex-col rounded border-line border gap-6 w-[400px]">
+      <div className="bg-card p-6 flex flex-col rounded-md gap-6 w-[400px]">
         <div className="flex gap-4">
           <div className="border border-line p-6 rounded-full flex items-center justify-center">
             {icons[props.icon]}

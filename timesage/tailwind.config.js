@@ -26,14 +26,15 @@ module.exports = {
             "on-primary": "#000000",
             line: "#DDD",
             "input-background": "#f4f5fa",
+            card: "#fff"
           },
         },
         dark: {
           layout: {},
           colors: {
-            background: "#121212",
-            primary: "#BB86FC",
-            surface: "#1F1F1F",
+            background: "#1F1E25",
+            primary: "#547EFE",
+            surface: "#0C0B10",
             secondary: "#03DAC6",
             tertiary: "#885217",
             fourth: "#26D0FF",
@@ -43,6 +44,7 @@ module.exports = {
             "on-primary": "#000",
             line: "#333",
             "input-background": "#121212",
+            card: "#151419",
           },
         },
       },

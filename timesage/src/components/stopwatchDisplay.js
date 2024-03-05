@@ -33,7 +33,7 @@ const StopwatchDisplay = () => {
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
       <div
-        className="flex flex-col gap-4 bg-surface border border-line p-4 rounded-md"
+        className="flex flex-col gap-4 bg-card p-4 rounded-md"
         style={{ width: 200 }}
       >
         {/* Top section */}

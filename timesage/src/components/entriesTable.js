@@ -78,7 +78,7 @@ const EntriesTable = (props) => {
             <TableRow>
               {columns.map((column, index) => (
                 <TableCell
-                  className="bg-surface text-on-surface border-line"
+                  className="bg-card text-on-surface border-line"
                   key={index}
                   align={"left"}
                   /* style={{ minWidth: column.minWidth }} */
@@ -94,7 +94,7 @@ const EntriesTable = (props) => {
                 <TableRow
                   hover
                   key={row.id}
-                  className={`${index % 2 == 0 ? "" : "bg-surface"}`}
+                  className={`${index % 2 == 0 ? "" : "bg-card"}`}
                 >
                   <TableCell className="text-on-surface border-0">
                     {formatDate(row.started_at)}

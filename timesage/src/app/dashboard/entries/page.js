@@ -35,7 +35,7 @@ const Entries = async ({ searchParams }) => {
           </div>
           <Link
             href={`?manualAddEntry=true`}
-            className="flex py-2 px-4 bg-surface border border-line rounded-md gap-2"
+            className="flex py-2 px-4 bg-primary border border-line rounded-md gap-2"
           >
             <AddIcon />
             <p>Manual log</p>
