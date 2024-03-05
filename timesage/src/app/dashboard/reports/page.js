@@ -14,45 +14,49 @@ const Reports = () => {
         </h2>
       </div>
       {/* Content container */}
-      <div className="flex flex-row gap-4">
-        {/* Left side */}
-        <div className="flex flex-col flex-1 gap-2">
-          <DashboardPeriod />
-          {/* BANS */}
-          <div className="flex flex-row gap-4">
-            <ReportCard
-              icon="time"
-              header="Productivity"
-              BAN={12.5}
-              BANlabel={"hrs"}
-              subheader={"20% increase from last month"}
-              color={"primary"}
-              target={"20 hours"}
-            />
-            <ReportCard
-              icon="time"
-              header="Productivity"
-              BAN={12.5}
-              BANlabel={"hrs"}
-              subheader={"20% increase from last month"}
-              color={"danger"}
-              target={"20 hours"}
-            />
-            <ReportCard
-              icon="time"
-              header="Productivity"
-              BAN={12.5}
-              BANlabel={"hrs"}
-              subheader={"20% increase from last month"}
-              color={"secondary"}
-              target={"20 hours"}
-            />
+      <div className="flex flex-col gap-2">
+        {/* Period */}
+        <DashboardPeriod />
+        {/* Cards and graphs container */}
+        <div className="flex flex-row gap-4">
+          {/* Left side */}
+          <div className="flex flex-col flex-1 gap-2">
+            {/* BANS */}
+            <div className="flex flex-row gap-4">
+              <ReportCard
+                icon="time"
+                header="Productivity"
+                BAN={12.5}
+                BANlabel={"hrs"}
+                subheader={"20% increase from last month"}
+                color={"primary"}
+                target={"20 hours"}
+              />
+              <ReportCard
+                icon="time"
+                header="Productivity"
+                BAN={12.5}
+                BANlabel={"hrs"}
+                subheader={"20% increase from last month"}
+                color={"danger"}
+                target={"20 hours"}
+              />
+              <ReportCard
+                icon="time"
+                header="Productivity"
+                BAN={12.5}
+                BANlabel={"hrs"}
+                subheader={"20% increase from last month"}
+                color={"secondary"}
+                target={"20 hours"}
+              />
+            </div>
           </div>
-        </div>
-        {/* Right side */}
-        <div className="flex flex-col gap-4">
-          {/* Activity  */}
-          <ReportActivity />
+          {/* Right side */}
+          <div className="flex flex-col gap-4">
+            {/* Activity  */}
+            <ReportActivity />
+          </div>
         </div>
       </div>
     </div>
