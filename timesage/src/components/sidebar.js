@@ -64,7 +64,7 @@ const Sidebar = () => {
             <NavItem name="Projects" icon="ListAltIcon" />
           </li>
           <li>
-            <NavItem name="Reports" icon="EquilizerIcon" />
+            <NavItem name="Summary" icon="EquilizerIcon" />
           </li>
         </ul>
       </div>

@@ -4,7 +4,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 // NextUI
 import { Progress } from "@nextui-org/react";
 
-const ReportCard = (props) => {
+const SummaryCard = (props) => {
   const icons = {
     time: <AccessTimeIcon />,
     projects: <ArticleIcon />,
@@ -30,4 +30,4 @@ const ReportCard = (props) => {
   );
 };
 
-export default ReportCard;
+export default SummaryCard;

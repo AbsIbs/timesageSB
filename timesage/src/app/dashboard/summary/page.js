@@ -1,16 +1,16 @@
 import React from "react";
 // Components
-import ReportCard from "@/components/reportCard";
+import SummaryCard from "@/components/summaryCard";
 import DashboardPeriod from "@/components/dashboardPeriod";
-import ReportActivity from "@/components/reportActivity";
+import SummaryActivity from "@/components/summaryActivity";
 
-const Reports = () => {
+const Summary = () => {
   return (
     <div className="px-10 py-6 flex flex-col gap-8">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl">Reports</h1>
+        <h1 className="text-3xl">Summary</h1>
         <h2 className="font-light">
-          Visualize your productivity with detailed reports
+          Visualize your productivity with a detailed summary
         </h2>
       </div>
       {/* Content container */}
@@ -23,7 +23,7 @@ const Reports = () => {
           <div className="flex flex-col flex-1 gap-2">
             {/* BANS */}
             <div className="flex flex-row gap-4">
-              <ReportCard
+              <SummaryCard
                 icon="time"
                 header="Productivity"
                 BAN={12.5}
@@ -32,7 +32,7 @@ const Reports = () => {
                 color={"primary"}
                 target={"20 hours"}
               />
-              <ReportCard
+              <SummaryCard
                 icon="time"
                 header="Productivity"
                 BAN={12.5}
@@ -41,7 +41,7 @@ const Reports = () => {
                 color={"danger"}
                 target={"20 hours"}
               />
-              <ReportCard
+              <SummaryCard
                 icon="time"
                 header="Productivity"
                 BAN={12.5}
@@ -55,7 +55,7 @@ const Reports = () => {
           {/* Right side */}
           <div className="flex flex-col gap-4">
             {/* Activity  */}
-            <ReportActivity />
+            <SummaryActivity />
           </div>
         </div>
       </div>
@@ -63,4 +63,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default Summary;
