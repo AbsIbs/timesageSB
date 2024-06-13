@@ -1,6 +1,6 @@
 "use client";
 // TimerDisplay.js
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { StopwatchContext } from "./stopwatchContext";
 import { StopwatchModalContext } from "./stopwatchModalContext";
 import Snackbar from "@mui/material/Snackbar";
@@ -13,14 +13,15 @@ import AddIcon from "@mui/icons-material/Add";
 const StopwatchDisplay = () => {
   const { time, isRunning, startAndStop, reset } = useContext(StopwatchContext);
   const { setShowModal } = useContext(StopwatchModalContext);
+
   // Hours calculation
-  const hours = Math.floor(time / 360000);
+  const hours = Math.floor(time / 3600000); // Fixed this line to use 3600000 instead of 360000
 
   // Minutes calculation
-  const minutes = Math.floor(time / 60000);
+  const minutes = Math.floor((time % 3600000) / 60000);
 
   // Seconds calculation
-  const seconds = ((time % 60000) / 1000).toFixed(0)
+  const seconds = ((time % 60000) / 1000).toFixed(0);
 
   const submitHandler = () => {
     setShowModal(true);
