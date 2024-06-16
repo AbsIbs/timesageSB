@@ -20,7 +20,6 @@ const AuthForm = () => {
 
   return (
     <Box className={"bg-surface"} sx={style}>
-      {/* Sign in with google */}
       <SignInWithGoogle />
       <SignInWithGitHub />
     </Box>
