@@ -1,6 +1,6 @@
 "use client";
 // TimerDisplay.js
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StopwatchContext } from "./stopwatchContext";
 import { StopwatchModalContext } from "./stopwatchModalContext";
 import Snackbar from "@mui/material/Snackbar";

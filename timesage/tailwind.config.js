@@ -26,14 +26,14 @@ module.exports = {
             "on-primary": "#000000",
             line: "#DDD",
             "input-background": "#f4f5fa",
-            card: "#fff"
+            card: "#fff",
           },
         },
         dark: {
           layout: {},
           colors: {
             background: "#1F1E25",
-            primary: "#547EFE",
+            primary: "#BB86FC",
             surface: "#0C0B10",
             secondary: "#03DAC6",
             tertiary: "#885217",
