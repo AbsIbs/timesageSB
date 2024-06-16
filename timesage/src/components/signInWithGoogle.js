@@ -15,7 +15,10 @@ const SignInWithGoogle = () => {
     const res = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000/signIn/",
+        redirectTo:
+          window.location.hostname === "localhost"
+            ? "http://localhost:3000/signIn/"
+            : "https://timesage-demo.vercel.app/signIn/",
       },
     });
     console.log(res);
