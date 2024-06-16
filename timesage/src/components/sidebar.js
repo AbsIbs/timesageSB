@@ -4,8 +4,6 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-// Components
-import TimeSelector from "./timeSelector";
 
 // Icons
 import {
@@ -62,9 +60,6 @@ const Sidebar = () => {
           </li>
           <li>
             <NavItem name="Projects" icon="ListAltIcon" />
-          </li>
-          <li>
-            <NavItem name="Summary" icon="EquilizerIcon" />
           </li>
         </ul>
       </div>

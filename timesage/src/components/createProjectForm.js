@@ -31,6 +31,7 @@ const CreateProjectForm = () => {
   const [descError, setDescError] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
+  const [limitError, setLimitError] = useState(false);
 
   const icons = {
     work: <WorkIcon fontSize="large" />,
@@ -64,10 +65,17 @@ const CreateProjectForm = () => {
       setDescError(res.desc);
       setErrorAlert(true);
       setLoading(false);
+      return;
+    } else if (res.type == "limitError") {
+      setErrorAlert(true);
+      setLimitError(true);
+      setLoading(false);
+      return;
     } else {
       setLoading(false);
       setSuccessAlert(true);
       router.push("/dashboard/projects");
+      return;
     }
   };
 
@@ -102,7 +110,11 @@ const CreateProjectForm = () => {
           severity="error"
           sx={{ width: "100%" }}
         >
-          Oops! There was a problem with creating your project
+          <p>
+            {limitError
+              ? "You have reached the limit of 5 projects. Please delete some projects."
+              : "An error occured while creating your project"}
+          </p>
         </Alert>
       </Snackbar>
       <Modal aria-labelledby="unstyled-modal-title" open={true}>
@@ -137,7 +149,9 @@ const CreateProjectForm = () => {
                       name="icon"
                       onClick={() => setIcon(name)}
                       type="button"
-                      className={`bg-background flex justify-center items-center p-6 rounded-md border-2 ${name==icon? 'border-primary': 'border-line'}`}
+                      className={`bg-background flex justify-center items-center p-6 rounded-md border-2 ${
+                        name == icon ? "border-primary" : "border-line"
+                      }`}
                     >
                       {icons[name]}
                     </button>

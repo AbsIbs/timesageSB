@@ -67,33 +67,6 @@ const calculateTime = (props) => {
 };
 
 // PROJECTS
-export const createProject = async (formData) => {
-  // Validate the form data
-  const result = {
-    name: validate(formData.name, nameRegex, "string"),
-    desc: validate(formData.desc, descRegex, "string"),
-  };
-  if (!result.name || !result.desc || !formData.icon) {
-    // If at least one of the attributes fails the regex test
-    return { type: "error", name: result.name, desc: result.desc };
-  }
-
-  const supabase = createClient();
-  const { data, error } = await supabase.from("project").insert([
-    {
-      name: formData.name,
-      icon: formData.icon,
-      desc: formData.desc,
-    },
-  ]);
-  if (!error) {
-    revalidatePath("/dashboard/projects");
-    return { type: "success" };
-  } else {
-    console.log(error);
-  }
-};
-
 export const getProjects = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -108,6 +81,38 @@ export const getProject = async (id) => {
   const { data, error } = await supabase.from("project").select().eq("id", id);
   if (data) {
     return data[0];
+  } else {
+    console.log(error);
+  }
+};
+
+export const createProject = async (formData) => {
+  // Validate the form data
+  const result = {
+    name: validate(formData.name, nameRegex, "string"),
+    desc: validate(formData.desc, descRegex, "string"),
+  };
+  console.log(result)
+  if (!result.name || !result.desc || !formData.icon) {
+    // If at least one of the attributes fails the regex test
+    return { type: "error", name: !result.name, desc: !result.desc };
+  }
+  const supabase = createClient();
+  // Check to see if user has no more than 5 projects
+  const projects = await getProjects();
+  if (projects.length >= 5) {
+    return { type: "limitError" };
+  }
+  const { data, error } = await supabase.from("project").insert([
+    {
+      name: formData.name,
+      icon: formData.icon,
+      desc: formData.desc,
+    },
+  ]);
+  if (!error) {
+    revalidatePath("/dashboard/projects");
+    return { type: "success" };
   } else {
     console.log(error);
   }
@@ -141,7 +146,7 @@ export const updateProject = async (props) => {
     console.log({ error: `there was an error! ${error}` });
     return { type: "unknownError" };
   } else {
-    console.log('it updated')
+    console.log("it updated");
     revalidatePath(`/dashboard/projects/${props.id}`);
     return { type: "success" };
   }

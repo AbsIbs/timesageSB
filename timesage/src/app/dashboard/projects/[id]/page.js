@@ -1,3 +1,5 @@
+// NextJS
+import Link from "next/link";
 // Components
 import EntriesTable from "@/components/entriesTable";
 // Backend logic
@@ -16,7 +18,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 // UI
 import UpdateProjectUI from "@/components/updateProjectUI";
 import DeleteProjectUI from "@/components/deleteProjectUI";
-
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 const Page = async (searchParams) => {
   // Project Information
@@ -46,21 +48,28 @@ const Page = async (searchParams) => {
       {project && (
         <div className="px-10 py-6 flex flex-col gap-10">
           {/* Header */}
-          <div className="flex w-full justify-between">
-            <div className="flex gap-4 items-center justify-center">
-              {icons[project.icon]}
-              <h1 className="font-medium text-xl">{project.name}</h1>
-            </div>
-            <div className="flex gap-2">
-              <UpdateProjectUI
-                name={project.name}
-                desc={project.desc}
-                icon={project.icon}
-                id={project.id}
-              />
-              <DeleteProjectUI id={id} />
+          <div className="flex flex-col gap-4">
+            <Link href="/dashboard/projects" className="flex gap-1">
+              <KeyboardBackspaceIcon />
+              <p>back</p>
+            </Link>
+            <div className="flex w-full justify-between">
+              <div className="flex gap-4 items-center justify-center">
+                {icons[project.icon]}
+                <h1 className="font-medium text-xl">{project.name}</h1>
+              </div>
+              <div className="flex gap-2">
+                <UpdateProjectUI
+                  name={project.name}
+                  desc={project.desc}
+                  icon={project.icon}
+                  id={project.id}
+                />
+                <DeleteProjectUI id={id} />
+              </div>
             </div>
           </div>
+
           {/* Table */}
           {data.length > 0 ? (
             <div className="flex flex-col">

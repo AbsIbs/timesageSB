@@ -17,7 +17,7 @@ const Projects = async ({ searchParams }) => {
   return (
     <div className="px-10 py-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl">Projects</h1>
+        <h1 className="text-3xl">Projects ({data?.length}/5)</h1>
         <h2 className="font-light">Create and manage specific projects</h2>
         <div className="py-8 flex flex-col gap-4">
           <Link
