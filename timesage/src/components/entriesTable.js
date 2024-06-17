@@ -34,7 +34,7 @@ const EntriesTable = (props) => {
 
   const formatDuration = (duration) => {
     // Hours
-    const hours = Math.floor(duration / 3600000)
+    const hours = Math.floor(duration / 3600000);
       .toString()
       .padStart(2, "0");
     // Minutes calculation

@@ -26,7 +26,7 @@ const StopwatchModal = () => {
   const { time } = useContext(StopwatchContext);
 
   // Hours calculation
-  const hours = Math.floor(time / 360000);
+  const hours = Math.floor(time / 3600000);
 
   // Minutes calculation
   const minutes = Math.floor((time % 360000) / 6000);
