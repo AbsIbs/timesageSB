@@ -29,10 +29,10 @@ const StopwatchModal = () => {
   const hours = Math.floor(time / 3600000);
 
   // Minutes calculation
-  const minutes = Math.floor((time % 360000) / 6000);
+  const minutes = Math.floor((time % 3600000) / 60000);
 
   // Seconds calculation
-  const seconds = Math.floor((time % 6000) / 1000);
+  const seconds = ((time % 60000) / 1000).toFixed(0);
 
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState("");

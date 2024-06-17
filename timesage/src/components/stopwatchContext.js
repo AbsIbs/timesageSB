@@ -6,7 +6,7 @@ const StopwatchContext = createContext();
 
 const StopwatchProvider = ({ children }) => {
   // state to store time
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(4800000);
   // state to store start time
   const [startTime, setStartTime] = useState(null);
   // state to check stopwatch running or not
@@ -45,7 +45,7 @@ const StopwatchProvider = ({ children }) => {
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (60 * 60 * 1000));
-    const minutes = Math.floor(milliseconds / 60000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
     const seconds = ((milliseconds % 60000) / 1000).toFixed(0);
     return `${hours}:${minutes < 10 ? "0" : ""}${minutes}:${
       seconds < 10 ? "0" : ""
