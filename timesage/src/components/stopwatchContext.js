@@ -6,7 +6,7 @@ const StopwatchContext = createContext();
 
 const StopwatchProvider = ({ children }) => {
   // state to store time
-  const [time, setTime] = useState(4800000);
+  const [time, setTime] = useState(0);
   // state to store start time
   const [startTime, setStartTime] = useState(null);
   // state to check stopwatch running or not
