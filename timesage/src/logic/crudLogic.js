@@ -92,7 +92,7 @@ export const createProject = async (formData) => {
     name: validate(formData.name, nameRegex, "string"),
     desc: validate(formData.desc, descRegex, "string"),
   };
-  console.log(result)
+  console.log(result);
   if (!result.name || !result.desc || !formData.icon) {
     // If at least one of the attributes fails the regex test
     return { type: "error", name: !result.name, desc: !result.desc };
@@ -190,14 +190,17 @@ export const createEntry = async (formData) => {
   }
 
   const supabase = createClient();
-  const { data, error } = await supabase.from("entry").insert([
-    {
-      started_at: formData.started_at,
-      time: time,
-      desc: formData.desc,
-      project_id: formData.project_id,
-    },
-  ]);
+  const dataToInsert = {
+    time: time,
+    desc: formData.desc,
+    project_id: formData.project_id,
+  };
+
+  if (formData.started_at) {
+    data.started_at = formData.started_at;
+  }
+
+  const { data, error } = await supabase.from("entry").insert(dataToInsert);
 
   if (error) {
     console.log(error);

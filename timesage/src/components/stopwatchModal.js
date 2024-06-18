@@ -130,7 +130,7 @@ const StopwatchModal = () => {
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-2">
               <p className="text-3xl">Nice work!</p>
-              Let&rsquo;s log your time to a project.
+              Let&rsquo;s log your time to a project....
             </div>
             <FactCheckIcon style={{ fontSize: 60 }} />
           </div>
