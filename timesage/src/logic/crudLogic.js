@@ -197,7 +197,7 @@ export const createEntry = async (formData) => {
   };
 
   if (formData.started_at) {
-    data.started_at = formData.started_at;
+    dataToInsert.started_at = formData.started_at;
   }
 
   const { data, error } = await supabase.from("entry").insert(dataToInsert);
